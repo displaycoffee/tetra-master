@@ -1,0 +1,55 @@
+// Use helpers and theme variables
+@use '../helpers/_mixins';
+@use '../theme/_theme';
+
+//// RESETS
+//// --------------------------------------------------------------------------
+
+*,
+*:after,
+*:before {
+	box-sizing: border-box;
+}
+
+//// FLEX
+//// --------------------------------------------------------------------------
+
+.flex-wrap {
+	@include mixins.flex-layout(row wrap);
+}
+
+.flex-nowrap {
+	@include mixins.flex-layout(row nowrap);
+}
+
+//// BASE
+//// --------------------------------------------------------------------------
+
+body {
+	background: theme.$color-05;
+	padding: 50px;
+}
+
+.wrapper {
+	max-width: 1000px;
+	margin: 0 auto;
+}
+
+//// LAYOUT
+//// --------------------------------------------------------------------------
+
+.layout {
+	.layout-row {
+		margin: 0 -#{theme.$spacing-x4};
+		.layout-column {
+			padding: 0 theme.$spacing-x4;
+		}
+		.layout-sidebar {
+			@include mixins.flex(0 1 auto);
+			width: 200px;
+		}
+		.layout-content {
+			@include mixins.flex(1 1 0%);
+		}
+	}
+}
