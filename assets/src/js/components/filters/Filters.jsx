@@ -4,15 +4,12 @@ import { useState, useEffect } from 'react';
 /* local script imports */
 import { cardList } from '../../scripts/cardList';
 import { filterList } from '../../scripts/filterList';
-import { utils } from '../../scripts/utils';
 
 const Filters = () => {
 	let [filters, setFilters] = useState('');
-	//let filters = filterList;
+
 	useEffect(() => {
 		buildFilters();
-
-		//return null;
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	async function buildFilters() {
@@ -33,13 +30,11 @@ const Filters = () => {
 		setFilters(filterList);
 	}
 
-	console.log('tjese filters', filters);
-
 	return (
 		filters.dropped && (
 			<div>
 				{filters.dropped.values.map((value) => {
-					return <p>{value.value}</p>;
+					return <p key={value.value}>{value.value}</p>;
 				})}
 			</div>
 		)
