@@ -2,7 +2,7 @@
 import { cardList } from '../../scripts/cardList';
 import { utils } from '../../scripts/utils';
 
-const List = () => {
+const Cards = () => {
 	const defaulImage = 'https://placekitten.com/90/108';
 	const imageError = (e) => {
 		e.target.src = defaulImage;
@@ -65,4 +65,4 @@ const List = () => {
 	);
 };
 
-export default List;
+export default Cards;

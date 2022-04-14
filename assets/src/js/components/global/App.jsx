@@ -1,5 +1,6 @@
 /* local component imports */
-import List from '../cards/List';
+import Filters from '../filters/Filters';
+import Cards from '../cards/Cards';
 
 const App = () => {
 	return (
@@ -7,11 +8,11 @@ const App = () => {
 			<main className="layout">
 				<div className="layout-row flex-nowrap">
 					<aside className="layout-column layout-sidebar">
-						sidebar stufff
+						<Filters />
 					</aside>
 
 					<section className="layout-column layout-content">
-						<List />
+						<Cards />
 					</section>
 				</div>
 			</main>
