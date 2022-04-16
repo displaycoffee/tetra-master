@@ -1,8 +1,8 @@
 /* local script imports */
-import { cardList } from '../../scripts/cardList';
 import { utils } from '../../scripts/utils';
 
-const Cards = () => {
+const Cards = (props) => {
+	const cards = props.cards;
 	const defaulImage = 'https://placekitten.com/90/108';
 	const imageError = (e) => {
 		e.target.src = defaulImage;
@@ -10,7 +10,7 @@ const Cards = () => {
 
 	return (
 		<div className="card-list flex-wrap">
-			{cardList.map((card) => {
+			{cards.map((card) => {
 				// Check for if image is set
 				let displayImage = card.image ? card.image : defaultImage;
 
