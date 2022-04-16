@@ -1,6 +1,6 @@
 export const filterList = {
 	dropped: {
-		name: 'Droppbed By',
+		name: 'Dropped By',
 		values: [],
 	},
 	won: {

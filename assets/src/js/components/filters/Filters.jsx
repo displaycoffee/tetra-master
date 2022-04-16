@@ -1,8 +1,12 @@
 /* react imports */
 import { useState, useEffect } from 'react';
 
+/* local script imports */
+import { cardList } from '../../scripts/cardList';
+import { filterList } from '../../scripts/filterList';
+
 const Filters = (props) => {
-	const { filters, cards } = props;
+	const { selected } = props;
 	let [filtersState, setFilters] = useState('');
 
 	useEffect(() => {
@@ -12,11 +16,11 @@ const Filters = (props) => {
 	async function buildFilters() {
 		let droppedValues = [];
 
-		cards.forEach((card) => {
+		cardList.forEach((card) => {
 			if (card.dropped) {
 				if (!droppedValues.includes(card.dropped)) {
 					droppedValues.push(card.dropped);
-					filters.dropped.values.push({
+					filterList.dropped.values.push({
 						value: card.dropped,
 						count: 1,
 					});
@@ -24,7 +28,7 @@ const Filters = (props) => {
 			}
 		});
 
-		setFilters(filters);
+		setFilters(filterList);
 	}
 
 	return (

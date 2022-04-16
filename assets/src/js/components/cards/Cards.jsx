@@ -1,8 +1,19 @@
 /* local script imports */
 import { utils } from '../../scripts/utils';
 
+/* local script imports */
+import { cardList } from '../../scripts/cardList';
+
 const Cards = (props) => {
-	const cards = props.cards;
+	const { selected } = props;
+
+	// build modified card list
+	let modifiedCards =
+		selected.length > 0
+			? utils.checkSelected(cardList, selected)
+			: cardList;
+
+	// set default and on error image
 	const defaulImage = 'https://placekitten.com/90/108';
 	const imageError = (e) => {
 		e.target.src = defaulImage;
@@ -10,7 +21,7 @@ const Cards = (props) => {
 
 	return (
 		<div className="card-list flex-wrap">
-			{cards.map((card) => {
+			{modifiedCards.map((card) => {
 				// Check for if image is set
 				let displayImage = card.image ? card.image : defaultImage;
 
