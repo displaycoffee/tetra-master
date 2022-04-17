@@ -1,4 +1,5 @@
 export const utils = {
+	searchParams: decodeURIComponent(window.location.search.replace(/^\?/, '')),
 	handleize: (value) => {
 		return value
 			.toLowerCase()
@@ -12,7 +13,7 @@ export const utils = {
 
 			// check selected to see what is active
 			for (let i = 0; i < selected.length; i++) {
-				if (item[selected[i].field] == selected[i].value) {
+				if (String(item[selected[i].field]) == selected[i].value) {
 					isActive = true;
 					break;
 				}

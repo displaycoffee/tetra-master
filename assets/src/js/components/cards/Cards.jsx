@@ -1,27 +1,15 @@
-/* local script imports */
-import { utils } from '../../scripts/utils';
-
-/* local script imports */
-import { cardList } from '../../scripts/cardList';
-
 const Cards = (props) => {
-	const { selected } = props;
-
-	// build modified card list
-	let modifiedCards =
-		selected.length > 0
-			? utils.checkSelected(cardList, selected)
-			: cardList;
+	const { cards, params, utils } = props;
 
 	// set default and on error image
-	const defaulImage = 'https://placekitten.com/90/108';
+	const defaulImage = '/assets/dist/images/cactaur.png';
 	const imageError = (e) => {
 		e.target.src = defaulImage;
 	};
 
 	return (
 		<div className="card-list flex-wrap">
-			{modifiedCards.map((card) => {
+			{cards.map((card) => {
 				// Check for if image is set
 				let displayImage = card.image ? card.image : defaultImage;
 
@@ -40,16 +28,20 @@ const Cards = (props) => {
 						</div>
 
 						<div className="card-details">
-							<p className="card-details-name">
-								<strong>Name:</strong> {card.name}
-							</p>
+							{card.name && (
+								<p className="card-details-name">
+									<strong>Name:</strong> {card.name}
+								</p>
+							)}
 
-							<p className="card-details-value">
-								<strong>Value:</strong> {card.value}
-							</p>
+							{card.stats && (
+								<p className="card-details-stats">
+									<strong>Stats:</strong> {card.stats}
+								</p>
+							)}
 
-							<p className="card-details-found">
-								<strong>Found:</strong>
+							<p className="card-details-discovered">
+								<strong>Discovered:</strong>
 								<span className="icon-wrapper">
 									<svg className="icon icon-heart">
 										<use xlinkHref="#icon-heart"></use>
@@ -57,17 +49,23 @@ const Cards = (props) => {
 								</span>
 							</p>
 
-							<p className="card-details-dropped">
-								<strong>Dropped By:</strong> {card.dropped}
-							</p>
+							{Object.keys(params).map((param) => {
+								// loop through the params to display the remaining details
+								let field = params[param].field;
+								let name = params[param].name;
 
-							<p className="card-details-won">
-								<strong>Won From:</strong> {card.won}
-							</p>
-
-							<p className="card-details-missable">
-								<strong>Missable:</strong> {card.missable}
-							</p>
+								return (
+									card[field] && (
+										<p
+											key={param}
+											className={`card-details-${field}`}
+										>
+											<strong>{name}:</strong>{' '}
+											{String(card[field])}
+										</p>
+									)
+								);
+							})}
 						</div>
 					</article>
 				);

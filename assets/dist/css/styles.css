@@ -323,6 +323,10 @@ blockquote {
   box-sizing: border-box;
 }
 
+.pointer {
+  cursor: pointer;
+}
+
 .flex-wrap {
   display: -webkit-box;
   display: -webkit-flex;
@@ -371,6 +375,17 @@ body {
   -webkit-flex: 1 1 0%;
   -ms-flex: 1 1 0%;
   flex: 1 1 0%;
+}
+
+.filters a {
+  color: #ffffff;
+}
+.filters .filter .filter-options .filter-list .filter-list-option.is-active .filter-list-link {
+  color: #f1f169;
+  font-weight: bold;
+}
+.filters .filter .filter-options .filter-list .filter-list-option .filter-list-link .value-count {
+  font-size: 0.75rem;
 }
 
 .card-list {

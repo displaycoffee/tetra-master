@@ -1,9 +1,14 @@
 /* react imports */
 import { useState, useEffect } from 'react';
 
+/* local script imports */
+import { cardList } from '../../scripts/cardList';
+import { params } from '../../scripts/params';
+import { utils } from '../../scripts/utils';
+
 /* local component imports */
-import Filters from '../filters/Filters';
 import Cards from '../cards/Cards';
+import Filters from '../filters/Filters';
 
 const App = () => {
 	let [selectedFilters, setSelected] = useState('');
@@ -14,10 +19,9 @@ const App = () => {
 
 	async function buildSelected() {
 		// get search parameters from window location
-		const searchParams = window.location.search
-			.replace(/^\?/, '')
-			.replace(/\%20/gi, ' ')
-			.split('&');
+		const searchParams = utils.searchParams
+			? utils.searchParams.split('&')
+			: [];
 
 		// if there are parameters add them to selected
 		if (searchParams.length > 0) {
@@ -34,16 +38,30 @@ const App = () => {
 		setSelected(selectedFilters);
 	}
 
+	// build modified card list
+	let modifiedCards =
+		selectedFilters.length > 0
+			? utils.checkSelected(cardList, selectedFilters)
+			: cardList;
+
 	return (
 		<div className="wrapper">
 			<main className="layout">
 				<div className="layout-row flex-nowrap">
 					<aside className="layout-column layout-sidebar">
-						<Filters selected={selectedFilters} />
+						<Filters
+							cards={modifiedCards}
+							params={params}
+							utils={utils}
+						/>
 					</aside>
 
 					<section className="layout-column layout-content">
-						<Cards selected={selectedFilters} />
+						<Cards
+							cards={modifiedCards}
+							params={params}
+							utils={utils}
+						/>
 					</section>
 				</div>
 			</main>
