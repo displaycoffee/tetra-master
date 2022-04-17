@@ -1,6 +1,37 @@
+/* react imports */
+import { useSearchParams } from 'react-router-dom';
+
 const Filters = (props) => {
-	const { cards, params, utils } = props;
+	const { cards, params, utils, selected, buildSelected } = props;
+	let [searchParams, setSearchParams] = useSearchParams();
 	let filters = [];
+
+	function handleSubmit(e, field, value) {
+		e.preventDefault();
+
+		if (value.active) {
+			// remove functionality goes here
+		} else {
+			// set value as active
+			value.active = true;
+
+			// if value is not active, add to selected array
+			const newSelected = {
+				field: field,
+				name: params[field].name,
+				value: value.value,
+			};
+			selected.push(newSelected);
+
+			// add search param to url
+			let updatedSearchParams = new URLSearchParams(String(searchParams));
+			updatedSearchParams.append(field, value.value);
+			setSearchParams(String(updatedSearchParams));
+
+			// run bbuildSelected function to refresh card list
+			buildSelected();
+		}
+	}
 
 	// start by looping through params to build filters
 	filters = Object.keys(params).map((param) => {
@@ -62,7 +93,12 @@ const Filters = (props) => {
 										{filter.values.map((value) => {
 											return (
 												<div key={value.name} className={`filter-list-option${value.active ? ' is-active' : ''}`}>
-													<a className="filter-list-link pointer">
+													<a
+														className="filter-list-link pointer"
+														onClick={(e) => {
+															handleSubmit(e, filter.field, value);
+														}}
+													>
 														{value.name} <span className="value-count">({value.count})</span>
 													</a>
 												</div>

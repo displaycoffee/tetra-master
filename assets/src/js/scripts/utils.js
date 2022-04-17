@@ -1,5 +1,5 @@
 export const utils = {
-	searchParams: decodeURIComponent(window.location.search.replace(/^\?/, '')).toLowerCase(),
+	searchParams: decodeURIComponent(window.location.search.replace(/^\?/, '').replace(/\+/g, ' ')).toLowerCase(),
 	checkValue: (value) => {
 		// check if value is defined, even if value is boolean
 		return String(value) && value != undefined;
