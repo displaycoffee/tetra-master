@@ -4,13 +4,10 @@ const Filters = (props) => {
 
 	// start by looping through params to build filters
 	filters = Object.keys(params).map((param) => {
-		let field = params[param].field;
-		let name = params[param].name;
-
 		// set up filters config
 		let filtersConfig = {
-			field: field,
-			name: name,
+			field: param,
+			name: params[param].name,
 			values: [],
 		};
 
@@ -19,35 +16,29 @@ const Filters = (props) => {
 
 		// loop through cards and add to valuesStorage
 		cards.forEach((card) => {
-			const cardField = card[field];
+			if (utils.checkValue(card[param])) {
+				const valuesList = utils.setArray(card[param]);
 
-			if (String(cardField) && cardField != undefined) {
-				const cardValueField =
-					typeof cardField == 'object' ? cardField : [cardField];
-
-				cardValueField.forEach((value) => {
+				valuesList.forEach((value) => {
 					if (valuesStorage[value]) {
-						// if value is already there, add to count
+						// if value is already in valuesStorage, add to count
 						valuesStorage[value].count++;
 					} else {
-						let valueString = String(value);
-						let isActive = utils.searchParams.includes(
-							`${field}=${valueString}`
-						); // check if value is active by looking at searchParams
+						const valueLower = typeof value == 'string' ? value.toLowerCase() : value;
 
 						// otherwise add as new to storage
 						valuesStorage[value] = {
-							name: valueString,
+							name: String(value),
 							value: value,
 							count: 1,
-							active: isActive,
+							active: utils.searchParams.includes(`${param}=${valueLower}`), // check if active by looking at searchParams
 						};
 					}
 				});
 			}
 		});
 
-		// add values to filters config finally
+		// add value object to filtersConfig
 		filtersConfig.values = Object.keys(valuesStorage).map((value) => {
 			return valuesStorage[value];
 		});
@@ -61,11 +52,7 @@ const Filters = (props) => {
 				{filters.map((filter) => {
 					return (
 						filter.values.length !== 0 && (
-							<div
-								key={filter.field}
-								id={`filter-${filter.field}`}
-								className="filter"
-							>
+							<div key={filter.field} id={`filter-${filter.field}`} className="filter">
 								<div className="filter-header">
 									<h4>{filter.name}</h4>
 								</div>
@@ -74,19 +61,9 @@ const Filters = (props) => {
 									<div className="filter-list">
 										{filter.values.map((value) => {
 											return (
-												<div
-													key={value.name}
-													className={`filter-list-option${
-														value.active
-															? ' is-active'
-															: ''
-													}`}
-												>
+												<div key={value.name} className={`filter-list-option${value.active ? ' is-active' : ''}`}>
 													<a className="filter-list-link pointer">
-														{value.name}{' '}
-														<span className="value-count">
-															({value.count})
-														</span>
+														{value.name} <span className="value-count">({value.count})</span>
 													</a>
 												</div>
 											);
