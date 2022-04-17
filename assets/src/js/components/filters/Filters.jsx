@@ -22,23 +22,28 @@ const Filters = (props) => {
 			const cardField = card[field];
 
 			if (String(cardField) && cardField != undefined) {
-				if (valuesStorage[cardField]) {
-					// if value is already there, add to count
-					valuesStorage[cardField].count++;
-				} else {
-					let cardFieldString = String(cardField);
-					let isActive = utils.searchParams.includes(
-						`${field}=${cardFieldString}`
-					); // check if value is active by looking at searchParams
+				const cardValueField =
+					typeof cardField == 'object' ? cardField : [cardField];
 
-					// otherwise add as new to storage
-					valuesStorage[cardField] = {
-						name: cardFieldString,
-						value: cardField,
-						count: 1,
-						active: isActive,
-					};
-				}
+				cardValueField.forEach((value) => {
+					if (valuesStorage[value]) {
+						// if value is already there, add to count
+						valuesStorage[value].count++;
+					} else {
+						let valueString = String(value);
+						let isActive = utils.searchParams.includes(
+							`${field}=${valueString}`
+						); // check if value is active by looking at searchParams
+
+						// otherwise add as new to storage
+						valuesStorage[value] = {
+							name: valueString,
+							value: value,
+							count: 1,
+							active: isActive,
+						};
+					}
+				});
 			}
 		});
 

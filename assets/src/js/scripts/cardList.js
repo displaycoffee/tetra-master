@@ -4,7 +4,7 @@ export const cardList = [
 		name: 'Goblin',
 		stats: '0P00',
 		discovered: false,
-		dropped: 'enemy 01',
+		dropped: ['enemy 01', 'enemy 02', 'enemy 03'],
 		found: 'location 01',
 		won: 'person 01',
 		missable: false,

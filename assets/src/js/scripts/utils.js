@@ -13,9 +13,18 @@ export const utils = {
 
 			// check selected to see what is active
 			for (let i = 0; i < selected.length; i++) {
-				if (String(item[selected[i].field]) == selected[i].value) {
-					isActive = true;
-					break;
+				const currentSelected = item[selected[i].field];
+				const cardValueField =
+					typeof currentSelected == 'object'
+						? currentSelected
+						: [currentSelected];
+
+				for (let j = 0; j < cardValueField.length; j++) {
+					const currentValue = cardValueField[j];
+					if (String(currentValue) == selected[i].value) {
+						isActive = true;
+						break;
+					}
 				}
 			}
 
