@@ -2,7 +2,8 @@
 import { useSearchParams } from 'react-router-dom';
 
 const Filters = (props) => {
-	const { cards, params, utils, selected, buildSelected } = props;
+	const activeClass = 'is-active';
+	let { cards, params, utils, selected, buildSelected } = props;
 	let [searchParams, setSearchParams] = useSearchParams();
 	let filters = [];
 
@@ -10,10 +11,25 @@ const Filters = (props) => {
 		e.preventDefault();
 
 		if (value.active) {
-			// remove functionality goes here
+			// set value as inactive and remove class
+			value.active = false;
+			e.target.parentNode.classList.remove(activeClass);
+
+			// filter out inactive values from selected
+			selected = selected.filter((select) => {
+				let valueMatch = select.field == field && select.value == value.value;
+				return !valueMatch;
+			});
+
+			// remove filter param from url
+			// https://stackoverflow.com/questions/65241446/how-to-remove-only-one-of-multiple-key-value-pairs-with-the-same-key-using-urlse
+			// let updatedSearchParams = new URLSearchParams(String(searchParams));
+			// updatedSearchParams.delete(field, value.value);
+			// setSearchParams(String(updatedSearchParams));
 		} else {
-			// set value as active
+			// set value as active and add class
 			value.active = true;
+			e.target.parentNode.classList.add(activeClass);
 
 			// if value is not active, add to selected array
 			const newSelected = {
@@ -23,12 +39,12 @@ const Filters = (props) => {
 			};
 			selected.push(newSelected);
 
-			// add search param to url
+			// add filter params to url
 			let updatedSearchParams = new URLSearchParams(String(searchParams));
 			updatedSearchParams.append(field, value.value);
 			setSearchParams(String(updatedSearchParams));
 
-			// run bbuildSelected function to refresh card list
+			// run buildSelected function to refresh card list
 			buildSelected();
 		}
 	}
@@ -92,7 +108,7 @@ const Filters = (props) => {
 									<div className="filter-list">
 										{filter.values.map((value) => {
 											return (
-												<div key={value.name} className={`filter-list-option${value.active ? ' is-active' : ''}`}>
+												<div key={value.name} className={`filter-list-option${value.active ? ` ${activeClass}` : ''}`}>
 													<a
 														className="filter-list-link pointer"
 														onClick={(e) => {
