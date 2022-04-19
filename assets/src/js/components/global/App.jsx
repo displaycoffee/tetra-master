@@ -13,10 +13,10 @@ import Filters from '../filters/Filters';
 const App = () => {
 	let [selected, setSelected] = useState([]);
 	let [cards, setCards] = useState(cardList);
+	let [filters, setFilters] = useState([]);
 
 	useEffect(() => {
 		buildSelected();
-		//buildCards();
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	async function buildSelected() {
@@ -51,6 +51,8 @@ const App = () => {
 
 		// run buildCards after selected is done
 		buildCards();
+
+		console.log('buildSelectedHappened');
 	}
 
 	async function buildCards() {
@@ -74,6 +76,63 @@ const App = () => {
 
 		// set modified cards to state
 		setCards(cards);
+
+		//
+		buildFilters();
+
+		console.log('buildCardsHappened');
+	}
+
+	async function buildFilters() {
+		// start by looping through params to build filters
+		filters = Object.keys(params).map((param) => {
+			// set up filters config
+			let filtersConfig = {
+				field: param,
+				name: params[param].name,
+				values: [],
+			};
+
+			// storage object for values
+			let valuesStorage = {};
+
+			// loop through cards and add to valuesStorage
+			cards.forEach((card) => {
+				if (utils.checkValue(card[param])) {
+					const valuesList = utils.setArray(card[param]);
+
+					valuesList.forEach((value) => {
+						if (valuesStorage[value]) {
+							// if value is already in valuesStorage, add to count
+							valuesStorage[value].count++;
+						} else {
+							const valueLower = typeof value == 'string' ? value.toLowerCase() : value;
+
+							// otherwise add as new to storage
+							valuesStorage[value] = {
+								name: String(value),
+								value: value,
+								count: 1,
+								active: utils.searchParams.includes(`${param}=${valueLower}`), // check if active by looking at searchParams
+							};
+						}
+					});
+				}
+			});
+
+			// add value object to filtersConfig
+			filtersConfig.values = Object.keys(valuesStorage).map((value) => {
+				return valuesStorage[value];
+			});
+
+			return filtersConfig;
+		});
+
+		setFilters(filters);
+
+		console.log('buildFilterssHappened');
+
+		//console.log('in build', filters);
 	}
 
 	return (
@@ -81,7 +140,7 @@ const App = () => {
 			<main className="layout">
 				<div className="layout-row flex-nowrap">
 					<aside className="layout-column layout-sidebar">
-						<Filters cards={cards} params={params} utils={utils} selected={selected} setSelected={setSelected} buildSelected={buildSelected} buildCards={buildCards} />
+						<Filters cards={cards} params={params} utils={utils} selected={selected} setSelected={setSelected} buildSelected={buildSelected} buildCards={buildCards} filters={filters} setFilters={setFilters} />
 					</aside>
 
 					<section className="layout-column layout-content">

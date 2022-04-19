@@ -1,19 +1,18 @@
 /* react imports */
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 
 const Filters = (props) => {
-	const activeClass = 'is-active';
-	let { cards, params, utils, selected, buildSelected } = props;
+	let { cards, params, utils, selected, buildSelected, filters } = props;
+	//let [filters, setFilters] = useState([]);
 	let [searchParams, setSearchParams] = useSearchParams();
-	let filters = [];
 
-	function handleSubmit(e, field, value) {
+	function updateValue(e, field, value) {
 		e.preventDefault();
 
 		if (value.active) {
 			// set value as inactive and remove class
 			value.active = false;
-			e.target.parentNode.classList.remove(activeClass);
 
 			// filter out inactive values from selected
 			selected = selected.filter((select) => {
@@ -22,14 +21,16 @@ const Filters = (props) => {
 			});
 
 			// remove filter param from url
-			// https://stackoverflow.com/questions/65241446/how-to-remove-only-one-of-multiple-key-value-pairs-with-the-same-key-using-urlse
-			// let updatedSearchParams = new URLSearchParams(String(searchParams));
-			// updatedSearchParams.delete(field, value.value);
-			// setSearchParams(String(updatedSearchParams));
+			let updatedSearchParams = new URLSearchParams(String(searchParams));
+			const filterParams = updatedSearchParams.getAll(field).filter((paramValue) => paramValue !== value.value);
+			updatedSearchParams.delete(field);
+			filterParams.forEach((filterParam) => {
+				updatedSearchParams.append(field, filterParam);
+			});
+			setSearchParams(String(updatedSearchParams));
 		} else {
 			// set value as active and add class
 			value.active = true;
-			e.target.parentNode.classList.add(activeClass);
 
 			// if value is not active, add to selected array
 			const newSelected = {
@@ -43,55 +44,69 @@ const Filters = (props) => {
 			let updatedSearchParams = new URLSearchParams(String(searchParams));
 			updatedSearchParams.append(field, value.value);
 			setSearchParams(String(updatedSearchParams));
-
-			// run buildSelected function to refresh card list
-			buildSelected();
 		}
+
+		// run buildSelected function to refresh card list
+		buildSelected();
+		//buildFilters();
+		//setFilters(filters);
+
+		console.log('in click', filters);
 	}
 
-	// start by looping through params to build filters
-	filters = Object.keys(params).map((param) => {
-		// set up filters config
-		let filtersConfig = {
-			field: param,
-			name: params[param].name,
-			values: [],
-		};
+	// useEffect(() => {
+	// 	buildFilters();
+	// }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-		// storage object for values
-		let valuesStorage = {};
+	// async function buildFilters() {
+	// 	// start by looping through params to build filters
+	// 	filters = Object.keys(params).map((param) => {
+	// 		// set up filters config
+	// 		let filtersConfig = {
+	// 			field: param,
+	// 			name: params[param].name,
+	// 			values: [],
+	// 		};
 
-		// loop through cards and add to valuesStorage
-		cards.forEach((card) => {
-			if (utils.checkValue(card[param])) {
-				const valuesList = utils.setArray(card[param]);
+	// 		// storage object for values
+	// 		let valuesStorage = {};
 
-				valuesList.forEach((value) => {
-					if (valuesStorage[value]) {
-						// if value is already in valuesStorage, add to count
-						valuesStorage[value].count++;
-					} else {
-						const valueLower = typeof value == 'string' ? value.toLowerCase() : value;
+	// 		// loop through cards and add to valuesStorage
+	// 		cards.forEach((card) => {
+	// 			if (utils.checkValue(card[param])) {
+	// 				const valuesList = utils.setArray(card[param]);
 
-						// otherwise add as new to storage
-						valuesStorage[value] = {
-							name: String(value),
-							value: value,
-							count: 1,
-							active: utils.searchParams.includes(`${param}=${valueLower}`), // check if active by looking at searchParams
-						};
-					}
-				});
-			}
-		});
+	// 				valuesList.forEach((value) => {
+	// 					if (valuesStorage[value]) {
+	// 						// if value is already in valuesStorage, add to count
+	// 						valuesStorage[value].count++;
+	// 					} else {
+	// 						const valueLower = typeof value == 'string' ? value.toLowerCase() : value;
 
-		// add value object to filtersConfig
-		filtersConfig.values = Object.keys(valuesStorage).map((value) => {
-			return valuesStorage[value];
-		});
+	// 						// otherwise add as new to storage
+	// 						valuesStorage[value] = {
+	// 							name: String(value),
+	// 							value: value,
+	// 							count: 1,
+	// 							active: utils.searchParams.includes(`${param}=${valueLower}`), // check if active by looking at searchParams
+	// 						};
+	// 					}
+	// 				});
+	// 			}
+	// 		});
 
-		return filtersConfig;
-	});
+	// 		// add value object to filtersConfig
+	// 		filtersConfig.values = Object.keys(valuesStorage).map((value) => {
+	// 			return valuesStorage[value];
+	// 		});
+
+	// 		return filtersConfig;
+	// 	});
+
+	// 	setFilters(filters);
+
+	// 	//console.log('in build', filters);
+	// }
 
 	return (
 		filters.length !== 0 && (
@@ -108,11 +123,11 @@ const Filters = (props) => {
 									<div className="filter-list">
 										{filter.values.map((value) => {
 											return (
-												<div key={value.name} className={`filter-list-option${value.active ? ` ${activeClass}` : ''}`}>
+												<div key={value.name} className={`filter-list-option${value.active ? ' is-active' : ''}`}>
 													<a
 														className="filter-list-link pointer"
 														onClick={(e) => {
-															handleSubmit(e, filter.field, value);
+															updateValue(e, filter.field, value);
 														}}
 													>
 														{value.name} <span className="value-count">({value.count})</span>
