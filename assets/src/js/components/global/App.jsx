@@ -108,7 +108,7 @@ const App = () => {
 							// if value is already in valuesStorage, add to count
 							valuesStorage[value].count++;
 						} else {
-							const valueLower = typeof value == 'string' ? value.toLowerCase() : value;
+							const valueLower = String(value).toLowerCase();
 
 							// otherwise add as new to storage
 							valuesStorage[value] = {
@@ -138,7 +138,7 @@ const App = () => {
 			<main className="layout">
 				<div className="layout-row flex-nowrap">
 					<aside className="layout-column layout-sidebar">
-						<Filters filters={filters} params={params} utils={utils} selected={selected} buildSelected={buildSelected} />
+						<Filters filters={filters} utils={utils} buildSelected={buildSelected} />
 					</aside>
 
 					<section className="layout-column layout-content">

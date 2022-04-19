@@ -2,7 +2,7 @@
 import { useSearchParams } from 'react-router-dom';
 
 const Filters = (props) => {
-	let { filters, params, utils, selected, buildSelected } = props;
+	let { filters, utils, buildSelected } = props;
 	let [searchParams, setSearchParams] = useSearchParams();
 
 	function updateValue(e, field, value) {
