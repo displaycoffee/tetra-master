@@ -20,39 +20,40 @@ const App = () => {
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	async function buildSelected() {
-		if (selected.length <= 0) {
-			// init paramsList from window location
-			const paramsList = utils.searchParams ? utils.searchParams.split('&') : [];
+		// init paramsList from window location
+		const paramsList = utils.searchParams() ? utils.searchParams().split('&') : [];
 
-			if (paramsList.length > 0) {
-				// if there are parameters, add them to selected
-				selected = paramsList.map((param) => {
-					let paramValues = param.split('=');
-					let selectedConfig = false;
-					if (paramValues.length > 1) {
-						selectedConfig = {
-							field: paramValues[0],
-							name: params[paramValues[0]].name,
-							value: paramValues[1],
-						};
-					}
-					return selectedConfig;
-				});
+		if (paramsList.length > 0) {
+			// if there are parameters, add them to selected
+			selected = paramsList.map((param) => {
+				let paramValues = param.split('=');
+				let selectedConfig = false;
+				if (paramValues.length > 1) {
+					selectedConfig = {
+						field: paramValues[0],
+						name: params[paramValues[0]].name,
+						value: paramValues[1],
+					};
+				}
+				return selectedConfig;
+			});
 
-				// filter out selected elements that are invalid parameters
-				selected = selected.filter((select) => {
-					return select;
-				});
-			}
+			// filter out selected elements that are invalid parameters
+			selected = selected.filter((select) => {
+				return select;
+			});
+		} else {
+			selected = [];
 		}
 
 		// set selected filters to state
 		setSelected(selected);
 
 		// run buildCards after selected is done
-		buildCards();
-
-		console.log('buildSelectedHappened');
+		const newCards = await buildCards();
+		if (newCards) {
+			setCards(newCards);
+		}
 	}
 
 	async function buildCards() {
@@ -66,21 +67,22 @@ const App = () => {
 					// further, we need to check all values in the cards current field
 					// once a match is made, return true
 					return valuesList.some((value) => {
-						return String(value) == String(select.value);
+						return utils.compareValues(value, select.value);
 					});
 				});
 
 				return cardActive;
 			});
+		} else {
+			cards = cardList;
 		}
 
-		// set modified cards to state
-		setCards(cards);
+		const newFilters = await buildFilters();
+		if (cards && newFilters) {
+			setFilters(newFilters);
+		}
 
-		//
-		buildFilters();
-
-		console.log('buildCardsHappened');
+		return cards;
 	}
 
 	async function buildFilters() {
@@ -113,7 +115,7 @@ const App = () => {
 								name: String(value),
 								value: value,
 								count: 1,
-								active: utils.searchParams.includes(`${param}=${valueLower}`), // check if active by looking at searchParams
+								active: utils.searchParams().includes(`${param}=${valueLower}`), // check if active by looking at searchParams
 							};
 						}
 					});
@@ -128,11 +130,7 @@ const App = () => {
 			return filtersConfig;
 		});
 
-		setFilters(filters);
-
-		console.log('buildFilterssHappened');
-
-		//console.log('in build', filters);
+		return filters;
 	}
 
 	return (
@@ -140,7 +138,7 @@ const App = () => {
 			<main className="layout">
 				<div className="layout-row flex-nowrap">
 					<aside className="layout-column layout-sidebar">
-						<Filters cards={cards} params={params} utils={utils} selected={selected} setSelected={setSelected} buildSelected={buildSelected} buildCards={buildCards} filters={filters} setFilters={setFilters} />
+						<Filters filters={filters} params={params} utils={utils} selected={selected} buildSelected={buildSelected} />
 					</aside>
 
 					<section className="layout-column layout-content">
