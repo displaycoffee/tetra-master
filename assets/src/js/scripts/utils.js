@@ -1,7 +1,4 @@
 export let utils = {
-	searchParams: () => {
-		return decodeURIComponent(window.location.search.replace(/^\?/, '').replace(/\+/g, ' ')).toLowerCase();
-	},
 	checkValue: (value) => {
 		// check if value is defined, even if value is boolean
 		return String(value) && value != undefined;
@@ -21,5 +18,36 @@ export let utils = {
 			.replace(/[^\w\s]/g, '')
 			.replace(/\s/g, '-')
 			.trim();
+	},
+	getParams: () => {
+		return decodeURIComponent(window.location.search.replace(/^\?/, '').replace(/\+/g, ' ')).toLowerCase();
+	},
+	addParam: (params, field, value, paramsCallback) => {
+		let newParams = new URLSearchParams(String(params));
+
+		// append new params to url
+		newParams.append(field, value);
+
+		// set new params to state
+		paramsCallback(String(newParams));
+	},
+	removeParam: (params, field, value, paramsCallback) => {
+		let newParams = new URLSearchParams(String(params));
+
+		// filter out values which should be retained
+		const keepParams = newParams.getAll(field).filter((keep) => {
+			return !utils.compareValues(keep, value);
+		});
+
+		// delete field from params
+		newParams.delete(field);
+
+		// add back params with deleted field
+		keepParams.forEach((keep) => {
+			newParams.append(field, keep);
+		});
+
+		// set new params to state
+		paramsCallback(String(newParams));
 	},
 };

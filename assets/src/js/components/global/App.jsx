@@ -21,7 +21,7 @@ const App = () => {
 
 	async function buildSelected() {
 		// init paramsList from window location
-		const paramsList = utils.searchParams() ? utils.searchParams().split('&') : [];
+		const paramsList = utils.getParams() ? utils.getParams().split('&') : [];
 
 		if (paramsList.length > 0) {
 			// if there are parameters, add them to selected
@@ -115,7 +115,7 @@ const App = () => {
 								name: String(value),
 								value: value,
 								count: 1,
-								active: utils.searchParams().includes(`${param}=${valueLower}`), // check if active by looking at searchParams
+								active: utils.getParams().includes(`${param}=${valueLower}`), // check if active by looking at getParams
 							};
 						}
 					});

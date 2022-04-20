@@ -3,27 +3,18 @@ import { useSearchParams } from 'react-router-dom';
 
 const Filters = (props) => {
 	let { filters, utils, buildSelected } = props;
-	let [searchParams, setSearchParams] = useSearchParams();
+	let [filterParams, setFilterParams] = useSearchParams();
 
-	function updateValue(e, field, value) {
+	// add or remove params from url, then rebuild display
+	function handleValue(e, field, value) {
 		e.preventDefault();
 
 		if (value.active) {
-			// remove filter param from url
-			let updatedSearchParams = new URLSearchParams(String(searchParams));
-			const filterParams = updatedSearchParams.getAll(field).filter((paramValue) => {
-				return !utils.compareValues(paramValue, value.value);
-			});
-			updatedSearchParams.delete(field);
-			filterParams.forEach((filterParam) => {
-				updatedSearchParams.append(field, filterParam);
-			});
-			setSearchParams(String(updatedSearchParams));
+			// remove filter params from url
+			utils.removeParam(filterParams, field, value.value, setFilterParams);
 		} else {
 			// add filter params to url
-			let updatedSearchParams = new URLSearchParams(String(searchParams));
-			updatedSearchParams.append(field, value.value);
-			setSearchParams(String(updatedSearchParams));
+			utils.addParam(filterParams, field, value.value, setFilterParams);
 		}
 
 		// run buildSelected function to refresh card list
@@ -49,7 +40,7 @@ const Filters = (props) => {
 													<a
 														className="filter-list-link pointer"
 														onClick={(e) => {
-															updateValue(e, filter.field, value);
+															handleValue(e, filter.field, value);
 														}}
 													>
 														{value.name} <span className="value-count">({value.count})</span>
