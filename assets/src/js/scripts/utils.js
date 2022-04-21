@@ -50,4 +50,25 @@ export let utils = {
 		// set new params to state
 		paramsCallback(String(newParams));
 	},
+	clearParams: (params, paramsCallback) => {
+		let newParams = new URLSearchParams(String(params));
+
+		// get list of param values
+		const removeParams = String(params)
+			.split('&')
+			.map((remove) => {
+				return remove.split('=')[0];
+			});
+
+		// get unique params
+		const getUnique = [...new Set(removeParams)];
+
+		// delete field params
+		getUnique.forEach((remove) => {
+			newParams.delete(remove);
+		});
+
+		// set new params to state
+		paramsCallback(String(newParams));
+	},
 };

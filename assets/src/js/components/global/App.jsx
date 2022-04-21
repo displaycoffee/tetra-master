@@ -6,9 +6,10 @@ import { cardList } from '../../scripts/cardList';
 import { params } from '../../scripts/params';
 import { utils } from '../../scripts/utils';
 
-/* local component imports */
-import Cards from '../cards/Cards';
-import Filters from '../filters/Filters';
+/*local com ponent imports */
+import Sidebar from './Sidebar';
+import Content from './Content';
+import NoResults from './NoResults';
 
 const App = () => {
 	let [selected, setSelected] = useState([]);
@@ -28,13 +29,16 @@ const App = () => {
 			selected = paramsList.map((param) => {
 				let paramValues = param.split('=');
 				let selectedConfig = false;
-				if (paramValues.length > 1) {
+
+				// param pairs should contain two items in the array and should also be in the params config
+				if (paramValues.length > 1 && params[paramValues[0]]) {
 					selectedConfig = {
 						field: paramValues[0],
 						name: params[paramValues[0]].name,
 						value: paramValues[1],
 					};
 				}
+
 				return selectedConfig;
 			});
 
@@ -50,9 +54,9 @@ const App = () => {
 		setSelected(selected);
 
 		// run buildCards after selected is done
-		const newCards = await buildCards();
-		if (newCards) {
-			setCards(newCards);
+		const cardsResponse = await buildCards();
+		if (cardsResponse) {
+			setCards(cardsResponse);
 		}
 	}
 
@@ -77,9 +81,10 @@ const App = () => {
 			cards = cardList;
 		}
 
-		const newFilters = await buildFilters();
-		if (cards && newFilters) {
-			setFilters(newFilters);
+		// run buildFilters after selected is done
+		const filtersResponse = await buildFilters();
+		if (cards && filtersResponse) {
+			setFilters(filtersResponse);
 		}
 
 		return cards;
@@ -137,17 +142,15 @@ const App = () => {
 		<div className="wrapper">
 			<main className="layout">
 				<div className="layout-row flex-nowrap">
-					<aside className="layout-column layout-sidebar">
-						<Filters filters={filters} utils={utils} buildSelected={buildSelected} />
-					</aside>
+					{cards.length !== 0 ? (
+						<>
+							<Sidebar filters={filters} utils={utils} selected={selected} buildSelected={buildSelected} />
 
-					<section className="layout-column layout-content">
-						<h2 className="cards-count">
-							{cards.length} card{cards.length == 1 ? '' : 's'} found
-						</h2>
-
-						<Cards cards={cards} params={params} utils={utils} />
-					</section>
+							<Content cards={cards} params={params} utils={utils} />
+						</>
+					) : (
+						<NoResults />
+					)}
 				</div>
 			</main>
 		</div>
