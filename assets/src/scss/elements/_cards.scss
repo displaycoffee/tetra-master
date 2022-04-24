@@ -5,7 +5,7 @@
 //// CARD LISTING
 //// --------------------------------------------------------------------------
 
-.cards-list {
+.card-list {
 	margin: 0 -#{theme.$spacing-x2};
 	.card {
 		@include mixins.flex-parent(align-items, flex-start);
@@ -13,8 +13,7 @@
 		padding: 0 theme.$spacing-x2;
 		margin: 0 0 theme.$spacing-x4 0;
 		&,
-		.card-image,
-		.card-details {
+		.card-image, .card-details {
 			@include mixins.flex(0 1 auto);
 		}
 		.card-image {

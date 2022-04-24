@@ -2,9 +2,10 @@
 import { useState, useEffect } from 'react';
 
 /* local script imports */
-import { cardList } from '../../scripts/cardList';
 import { filterList } from '../../scripts/filterList';
+import { cardList } from '../../scripts/cardList';
 import { utils } from '../../scripts/utils';
+import { builds } from '../../scripts/builds';
 
 /*local component imports */
 import Sidebar from './Sidebar';
@@ -13,142 +14,35 @@ import NoResults from './NoResults';
 
 const Index = () => {
 	let [selected, setSelected] = useState([]);
-	let [cards, setCards] = useState(cardList);
+	let [cards, setCards] = useState([]);
 	let [filters, setFilters] = useState([]);
 
 	useEffect(() => {
-		buildSelected(true);
+		buildSelected();
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-	async function buildSelected(buildNext) {
-		const paramsList = utils.getParams() ? utils.getParams().split('&') : [];
-
-		if (paramsList.length > 0) {
-			// configure selected
-			selected = paramsList.map((param) => {
-				let paramValues = param.split('=');
-				let selectedConfig = false;
-
-				// param pairs should contain two items and be in filterList config
-				if (paramValues.length > 1) {
-					const paramField = paramValues[0];
-					const paramValue = paramValues[1];
-
-					if (filterList[paramField]) {
-						selectedConfig = {
-							field: paramField,
-							name: filterList[paramField].name,
-							value: paramValue,
-						};
-					}
-				}
-
-				return selectedConfig;
-			});
-
-			// filter invalid selected elements
-			selected = selected.filter((select) => {
-				return select;
-			});
-		} else {
-			selected = [];
-		}
-
-		// set selected filters to state
+	async function buildSelected() {
+		// set selected to state
+		selected = builds.selected(utils, selected, filterList);
 		setSelected(selected);
 
 		// run buildCards after selected is done
-		if (buildNext) {
-			const cardsResponse = await buildCards(true);
-			if (cardsResponse) {
-				setCards(cardsResponse);
-			}
+		const cardsResponse = await buildCards();
+		if (cardsResponse) {
+			setCards(cardsResponse);
 		}
 	}
 
-	async function buildCards(buildNext) {
-		// build modified cardList if selected has values
-		if (selected.length > 0) {
-			cards = cardList.filter((card) => {
-				// loop through selected values for each card
-				let cardActive = selected.some((select) => {
-					const valuesList = utils.setArray(card[select.field]);
-
-					// further, we need to check all values in the cards current field
-					// once a match is made, return true
-					return valuesList.some((value) => {
-						return utils.compareValues(value, select.value);
-					});
-				});
-
-				return cardActive;
-			});
-		} else {
-			cards = cardList;
-		}
+	async function buildCards() {
+		// set cards filters to state
+		cards = builds.cards(utils, selected, cardList);
+		setCards(cards);
 
 		// run buildFilters after selected is done
-		if (buildNext) {
-			const filtersResponse = await buildFilters();
-			if (cards && filtersResponse) {
-				setFilters(filtersResponse);
-			}
+		const filtersResponse = await builds.filters(utils, cards, filterList);
+		if (cards && filtersResponse) {
+			setFilters(filtersResponse);
 		}
-
-		return cards;
-	}
-
-	async function buildFilters() {
-		// start by looping through filterList to build filters
-		filters = Object.keys(filterList).map((filter) => {
-			// set up filters config
-			let filtersConfig = {
-				field: filter,
-				name: filterList[filter].name,
-				values: [],
-			};
-
-			// storage object for values
-			let valuesStorage = {};
-
-			// loop through cards and add to valuesStorage
-			cards.forEach((card) => {
-				if (utils.checkValue(card[filter])) {
-					const valuesList = utils.setArray(card[filter]);
-
-					valuesList.forEach((value) => {
-						if (valuesStorage[value]) {
-							// if value is already in valuesStorage, add to count
-							valuesStorage[value].count++;
-						} else {
-							const valueLower = String(value).toLowerCase();
-
-							// otherwise add as new to storage
-							valuesStorage[value] = {
-								name: String(value),
-								value: value,
-								count: 1,
-								active: utils.getParams().includes(`${filter}=${valueLower}`), // check if active by looking at getParams
-							};
-						}
-					});
-				}
-			});
-
-			// add value object to filtersConfig
-			filtersConfig.values = Object.keys(valuesStorage).map((value) => {
-				return valuesStorage[value];
-			});
-
-			// apply sort to values list
-			filtersConfig.values = utils.sortValues(filtersConfig.values, 'string', 'value', 'asc');
-
-			console.log(filtersConfig.values);
-
-			return filtersConfig;
-		});
-
-		return filters;
 	}
 
 	return (

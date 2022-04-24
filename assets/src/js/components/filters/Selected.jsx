@@ -5,26 +5,24 @@ const Selected = (props) => {
 	let { selected, utils, buildSelected } = props;
 	let [selectedParams, setSelectedParams] = useSearchParams();
 
-	// remove params from url, then rebuild display
 	function handleValue(e, field, value) {
 		e.preventDefault();
 
-		// remove filter params from url
-		utils.removeParam(selectedParams, field, value, setSelectedParams);
+		// remove filter parameters from url
+		utils.params.remove(selectedParams, field, value, setSelectedParams);
 
 		// run buildSelected function to refresh card list
-		buildSelected(true);
+		buildSelected();
 	}
 
-	// clear all values
 	function handleClear(e) {
 		e.preventDefault();
 
-		// clear all params from url
-		utils.clearParams(selectedParams, setSelectedParams);
+		// clear all parameters from url
+		utils.params.clear(selectedParams, setSelectedParams);
 
 		// run buildSelected function to refresh card list
-		buildSelected(true);
+		buildSelected();
 	}
 
 	return (
@@ -34,14 +32,14 @@ const Selected = (props) => {
 					<div className="selected-list">
 						{selected.map((select) => {
 							return (
-								<div key={select.value} className="selected-list-option">
+								<div key={select.id} className="selected-list-option">
 									<a
 										className="selected-list-link pointer"
 										onClick={(e) => {
 											handleValue(e, select.field, select.value);
 										}}
 									>
-										<strong>{select.name}:</strong> {select.value}
+										<strong>{select.label}:</strong> {select.value}
 									</a>
 								</div>
 							);
