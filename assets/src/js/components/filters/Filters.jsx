@@ -1,40 +1,58 @@
 /* react imports */
-import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 
-/* local script imports */
-import { cardList } from '../../scripts/cardList';
-import { filterList } from '../../scripts/filterList';
+const Filters = (props) => {
+	let { filters, utils, buildSelected } = props;
+	let [filterParams, setFilterParams] = useSearchParams();
 
-const Filters = () => {
-	let [filters, setFilters] = useState('');
+	// add or remove params from url, then rebuild display
+	function handleValue(e, field, value) {
+		e.preventDefault();
 
-	useEffect(() => {
-		buildFilters();
-	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+		if (value.active) {
+			// remove filter params from url
+			utils.removeParam(filterParams, field, value.value, setFilterParams);
+		} else {
+			// add filter params to url
+			utils.addParam(filterParams, field, value.value, setFilterParams);
+		}
 
-	async function buildFilters() {
-		let droppedValues = [];
-
-		cardList.forEach((card) => {
-			if (card.dropped) {
-				if (!droppedValues.includes(card.dropped)) {
-					droppedValues.push(card.dropped);
-					filterList.dropped.values.push({
-						value: card.dropped,
-						count: 1,
-					});
-				}
-			}
-		});
-
-		setFilters(filterList);
+		// run buildSelected function to refresh card list
+		buildSelected(true);
 	}
 
 	return (
-		filters.dropped && (
-			<div>
-				{filters.dropped.values.map((value) => {
-					return <p key={value.value}>{value.value}</p>;
+		filters.length !== 0 && (
+			<div className="filters">
+				{filters.map((filter) => {
+					return (
+						filter.values.length !== 0 && (
+							<div key={filter.field} id={`filter-${filter.field}`} className="filter">
+								<div className="filter-header">
+									<h4>{filter.name}</h4>
+								</div>
+
+								<div className="filter-options">
+									<div className="filter-list">
+										{filter.values.map((value) => {
+											return (
+												<div key={value.name} className={`filter-list-option${value.active ? ' is-active' : ''}`}>
+													<a
+														className="filter-list-link pointer"
+														onClick={(e) => {
+															handleValue(e, filter.field, value);
+														}}
+													>
+														{value.name} <span className="value-count">({value.count})</span>
+													</a>
+												</div>
+											);
+										})}
+									</div>
+								</div>
+							</div>
+						)
+					);
 				})}
 			</div>
 		)

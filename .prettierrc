@@ -1,5 +1,7 @@
 {
 	"useTabs": true,
 	"tabWidth": 4,
-	"singleQuote": true
+	"singleQuote": true,
+	"max_line_length": 9999,
+	"printWidth": 9999
 }

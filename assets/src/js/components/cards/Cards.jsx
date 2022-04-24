@@ -1,67 +1,66 @@
-/* local script imports */
-import { cardList } from '../../scripts/cardList';
-import { utils } from '../../scripts/utils';
+const Cards = (props) => {
+	const { cards, params, utils } = props;
 
-const Cards = () => {
-	const defaulImage = 'https://placekitten.com/90/108';
+	// set default and on error image
+	const defaulImage = '/assets/dist/images/cactaur.png';
 	const imageError = (e) => {
 		e.target.src = defaulImage;
 	};
 
 	return (
-		<div className="card-list flex-wrap">
-			{cardList.map((card) => {
-				// Check for if image is set
-				let displayImage = card.image ? card.image : defaultImage;
+		cards.length !== 0 && (
+			<div className="cards-list flex-wrap">
+				{cards.map((card) => {
+					// Check for if image is set
+					let displayImage = card.image ? card.image : defaultImage;
 
-				return (
-					<article
-						key={card.id}
-						id={`${utils.handleize(card.name)}-${card.id}`}
-						className="card card-block flex-nowrap"
-					>
-						<div className="card-image">
-							<img
-								src={displayImage}
-								onError={imageError}
-								loading="lazy"
-							/>
-						</div>
+					return (
+						<article key={card.id} id={`${utils.handleize(card.name)}-${card.id}`} className="card card-block flex-nowrap">
+							<div className="card-image">
+								<img src={displayImage} onError={imageError} loading="lazy" />
+							</div>
 
-						<div className="card-details">
-							<p className="card-details-name">
-								<strong>Name:</strong> {card.name}
-							</p>
+							<div className="card-details">
+								{card.name && (
+									<p className="card-details-name">
+										<strong>Name:</strong> {card.name}
+									</p>
+								)}
 
-							<p className="card-details-value">
-								<strong>Value:</strong> {card.value}
-							</p>
+								{card.stats && (
+									<p className="card-details-stats">
+										<strong>Stats:</strong> {card.stats}
+									</p>
+								)}
 
-							<p className="card-details-found">
-								<strong>Found:</strong>
-								<span className="icon-wrapper">
-									<svg className="icon icon-heart">
-										<use xlinkHref="#icon-heart"></use>
-									</svg>
-								</span>
-							</p>
+								<p className="card-details-collected">
+									<strong>Collected:</strong>
+									<span className="icon-wrapper">
+										<svg className="icon icon-heart">
+											<use xlinkHref="#icon-heart"></use>
+										</svg>
+									</span>
+								</p>
 
-							<p className="card-details-dropped">
-								<strong>Dropped By:</strong> {card.dropped}
-							</p>
+								{Object.keys(params).map((param) => {
+									// loop through the params to display the remaining details
+									let name = params[param].name;
+									let value = card[param];
 
-							<p className="card-details-won">
-								<strong>Won From:</strong> {card.won}
-							</p>
-
-							<p className="card-details-missable">
-								<strong>Missable:</strong> {card.missable}
-							</p>
-						</div>
-					</article>
-				);
-			})}
-		</div>
+									return (
+										utils.checkValue(value) && (
+											<p key={param} className={`card-details-${param}`}>
+												<strong>{name}:</strong> {String(value)}
+											</p>
+										)
+									);
+								})}
+							</div>
+						</article>
+					);
+				})}
+			</div>
+		)
 	);
 };
 
