@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react';
 
 /* local script imports */
 import { cardList } from '../../scripts/cardList';
-import { params } from '../../scripts/params';
+import { filterList } from '../../scripts/filterList';
 import { utils } from '../../scripts/utils';
 
 /*local component imports */
@@ -21,28 +21,32 @@ const Index = () => {
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
 	async function buildSelected(buildNext) {
-		// init paramsList from window location
 		const paramsList = utils.getParams() ? utils.getParams().split('&') : [];
 
 		if (paramsList.length > 0) {
-			// if there are parameters, add them to selected
+			// configure selected
 			selected = paramsList.map((param) => {
 				let paramValues = param.split('=');
 				let selectedConfig = false;
 
-				// param pairs should contain two items in the array and should also be in the params config
-				if (paramValues.length > 1 && params[paramValues[0]]) {
-					selectedConfig = {
-						field: paramValues[0],
-						name: params[paramValues[0]].name,
-						value: paramValues[1],
-					};
+				// param pairs should contain two items and be in filterList config
+				if (paramValues.length > 1) {
+					const paramField = paramValues[0];
+					const paramValue = paramValues[1];
+
+					if (filterList[paramField]) {
+						selectedConfig = {
+							field: paramField,
+							name: filterList[paramField].name,
+							value: paramValue,
+						};
+					}
 				}
 
 				return selectedConfig;
 			});
 
-			// filter out selected elements that are invalid parameters
+			// filter invalid selected elements
 			selected = selected.filter((select) => {
 				return select;
 			});
@@ -95,12 +99,12 @@ const Index = () => {
 	}
 
 	async function buildFilters() {
-		// start by looping through params to build filters
-		filters = Object.keys(params).map((param) => {
+		// start by looping through filterList to build filters
+		filters = Object.keys(filterList).map((filter) => {
 			// set up filters config
 			let filtersConfig = {
-				field: param,
-				name: params[param].name,
+				field: filter,
+				name: filterList[filter].name,
 				values: [],
 			};
 
@@ -109,8 +113,8 @@ const Index = () => {
 
 			// loop through cards and add to valuesStorage
 			cards.forEach((card) => {
-				if (utils.checkValue(card[param])) {
-					const valuesList = utils.setArray(card[param]);
+				if (utils.checkValue(card[filter])) {
+					const valuesList = utils.setArray(card[filter]);
 
 					valuesList.forEach((value) => {
 						if (valuesStorage[value]) {
@@ -124,7 +128,7 @@ const Index = () => {
 								name: String(value),
 								value: value,
 								count: 1,
-								active: utils.getParams().includes(`${param}=${valueLower}`), // check if active by looking at getParams
+								active: utils.getParams().includes(`${filter}=${valueLower}`), // check if active by looking at getParams
 							};
 						}
 					});
@@ -135,6 +139,11 @@ const Index = () => {
 			filtersConfig.values = Object.keys(valuesStorage).map((value) => {
 				return valuesStorage[value];
 			});
+
+			// apply sort to values list
+			filtersConfig.values = utils.sortValues(filtersConfig.values, 'string', 'value', 'asc');
+
+			console.log(filtersConfig.values);
 
 			return filtersConfig;
 		});
@@ -150,7 +159,7 @@ const Index = () => {
 						<>
 							<Sidebar filters={filters} utils={utils} selected={selected} buildSelected={buildSelected} />
 
-							<Content cards={cards} params={params} utils={utils} />
+							<Content cards={cards} filterList={filterList} utils={utils} />
 						</>
 					) : (
 						<NoResults />
