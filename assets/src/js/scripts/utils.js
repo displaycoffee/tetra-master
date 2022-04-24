@@ -1,44 +1,38 @@
 export let utils = {
-	checkValue: (value) => {
-		// check if value is defined, even if value is boolean
-		return String(value) && value != undefined;
-	},
-	compareValues: (value1, value2) => {
-		// comparison function to check values as strings
-		return String(value1).toLowerCase() == String(value2).toLowerCase();
-	},
-	setArray: (value) => {
+	setArray : (value) => {
 		// set value as array
 		return typeof value == 'object' ? value : [value];
 	},
-	handleize: (value) => {
+	handleize : (value) => {
 		// format value for html classes
-		return value
-			.toLowerCase()
-			.replace(/[^\w\s]/g, '')
-			.replace(/\s/g, '-')
-			.trim();
+		return value.toLowerCase().replace(/[^\w\s]/g, '').replace(/\s/g, '-').trim();
+	},
+	flatten : (object) => {
+		// flatten object into array
+		return Object.keys(object).map((value) => {
+			return object[value];
+		});
 	},
 	params: {
 		// functions for maniuplating parameters
-		get: () => {
+		get : () => {
 			// get decoded parameters from window location
 			return decodeURIComponent(window.location.search.replace(/^\?/, '').replace(/\+/g, ' ')).toLowerCase();
 		},
-		list: () => {
+		list : () => {
 			// return array of parameters
 			return utils.params.get() ? utils.params.get().split('&') : [];
 		},
-		config: (id, field, label, type) => {
+		config : (order, id, field, label) => {
 			// base config properties for parameters
 			return {
-				id: id ? id : `no-field-${Date.now()}`,
-				field: field ? field : false,
-				label: label ? label : false,
-				type: type ? type : false,
+				order : order ? order : 0,
+				id : id ? id : `no-field-${Date.now()}`,
+				field : field ? field : false,
+				label : label ? label : false
 			};
 		},
-		add: (params, field, value, callback) => {
+		add : (params, field, value, callback) => {
 			let newParams = new URLSearchParams(String(params));
 
 			// append new parameters to url
@@ -49,12 +43,12 @@ export let utils = {
 				callback(String(newParams));
 			}
 		},
-		remove: (params, field, value, callback) => {
+		remove : (params, field, value, callback) => {
 			let newParams = new URLSearchParams(String(params));
 
 			// filter out values which should be retained
 			const keepParams = newParams.getAll(field).filter((keep) => {
-				return !utils.compareValues(keep, value);
+				return !utils.values.compare(keep, value);
 			});
 
 			// delete field from parameters
@@ -70,15 +64,13 @@ export let utils = {
 				callback(String(newParams));
 			}
 		},
-		clear: (params, callback) => {
+		clear : (params, callback) => {
 			let newParams = new URLSearchParams(String(params));
 
 			// get list of parameter values
-			const removeParams = String(params)
-				.split('&')
-				.map((remove) => {
-					return remove.split('=')[0];
-				});
+			const removeParams = String(params).split('&').map((remove) => {
+				return remove.split('=')[0];
+			});
 
 			// get unique parameters
 			const getUnique = [...new Set(removeParams)];
@@ -94,36 +86,47 @@ export let utils = {
 			}
 		},
 	},
-	sortValues: (list, type, field, direction) => {
-		// sort values in a list based on type, field, and direction
-		list.sort((a, b) => {
-			let sortValueA = a[field];
-			let sortValueB = b[field];
+	values: {
+		// functions for manipulating values
+		check : (value) => {
+			// check if value is defined, even if value is boolean
+			return String(value) && value != undefined;
+		},
+		compare : (value1, value2) => {
+			// comparison function to check values as strings
+			return String(value1).toLowerCase() == String(value2).toLowerCase();
+		},
+		sort : (list, type, field, direction) => {
+			// sort values in a list based on type, field, and direction
+			list.sort((a, b) => {
+				let sortValueA = a[field];
+				let sortValueB = b[field];
 
-			if (type == 'string') {
-				// make sure booleans are strings
-				sortValueA = String(sortValueA);
-				sortValueB = String(sortValueB);
+				if (type == 'string') {
+					// make sure booleans are strings
+					sortValueA = String(sortValueA);
+					sortValueB = String(sortValueB);
 
-				// sorting method for strings
-				if (direction == 'asc') {
-					return sortValueA.localeCompare(sortValueB);
+					// sorting method for strings
+					if (direction == 'asc') {
+						return sortValueA.localeCompare(sortValueB);
+					}
+					if (direction == 'desc') {
+						return sortValueB.localeCompare(sortValueA);
+					}
 				}
-				if (direction == 'desc') {
-					return sortValueB.localeCompare(sortValueA);
+				if (type == 'integer') {
+					// sorting method for numbers
+					if (direction == 'asc') {
+						return sortValueA - sortValueB;
+					}
+					if (direction == 'desc') {
+						return sortValueB - sortValueA;
+					}
 				}
-			}
-			if (type == 'integer') {
-				// sorting method for numbers
-				if (direction == 'asc') {
-					return sortValueA - sortValueB;
-				}
-				if (direction == 'desc') {
-					return sortValueB - sortValueA;
-				}
-			}
-		});
+			});
 
-		return list;
+			return list;
+		},
 	},
 };

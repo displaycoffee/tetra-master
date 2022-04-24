@@ -8,52 +8,48 @@ import Cards from '../cards/Cards';
 const Content = (props) => {
 	let { cards, filterList, utils } = props;
 
-	function runSort() {
-		const paramsList = utils.params.get() ? utils.params.get().split('&') : [];
-		const sortIdentifier = 'sort=';
-		let sortParam = false;
+	function sortCards() {
+		const paramsList = utils.params.list();
 
 		if (paramsList.length > 0) {
+			const sortIdentifier = 'sort=';
+			let sortSelected = false;
+
 			// configure sort parameters
-			sortParam = paramsList.map((param) => {
-				let paramValues = param.replace(sortIdentifier, '').split(':');
-				let sortConfig = false;
+			sortSelected = paramsList.map((param) => {
+				if (param.includes(sortIdentifier)) {			
+					let paramValues = param.replace(sortIdentifier, '').split(':');
+					let sortDetail = false;
 
-				// parameter pairs should contain two items, be in sortList config, and have asc or desc direction
-				if (paramValues.length > 1) {
-					const paramField = paramValues[0];
-					const paramDirection = paramValues[1];
+					// parameter pairs should contain two items, be in sortList config, and have asc or desc direction
+					if (paramValues.length > 1) {					
+						const paramValue = paramValues[1];
+						const paramField = paramValues[0] + paramValue.charAt(0).toUpperCase() + paramValue.slice(1);
+						const paramDetail = sortList[paramField] ? sortList[paramField] : false;
 
-					if (sortList[paramField] && (paramDirection == 'asc' || paramDirection == 'desc')) {
-						sortConfig = {
-							field: paramField,
-							direction: paramDirection,
-							type: sortList[paramField].type,
-						};
+						if (paramDetail && (paramValue == 'asc' || paramValue == 'desc')) {
+							sortDetail = paramDetail;
+						}
 					}
+					
+					return sortDetail;
 				}
-
-				return sortConfig;
 			});
 
 			// filter invalid sort elements (will take last valid applied parameter)
-			sortParam = sortParam
-				.filter((sort) => {
-					return sort;
-				})
-				.pop();
-		} else {
-			sortParam = false;
-		}
-
-		if (sortParam) {
-			// apply sort to card list
-			cards = utils.sortValues(cards, sortParam.type, sortParam.field, sortParam.direction);
-		}
+			sortSelected = sortSelected.filter((sort) => {
+				return sort;
+			}).pop();
+			
+			if (sortSelected) {
+				// apply sort to card list
+				cards = utils.values.sort(cards, sortSelected.type, sortSelected.field, sortSelected.direction);
+			}
+		}		
 	}
 
 	// run sorting for card list
-	runSort();
+	sortCards();
 
 	return (
 		<section className="layout-column layout-content cards-found">
@@ -61,7 +57,7 @@ const Content = (props) => {
 				{cards.length} card{cards.length == 1 ? '' : 's'} found
 			</h2>
 
-			{/* <Sort sortList={sortList} /> */}
+			<Sort sortList={sortList} utils={utils} />
 
 			<Cards cards={cards} filterList={filterList} utils={utils} />
 		</section>

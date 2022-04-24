@@ -9,21 +9,21 @@ const Cards = (props) => {
 
 	return (
 		cards.length !== 0 && (
-			<div className="cards-list flex-wrap">
+			<div className="card-list flex-wrap">
 				{cards.map((card) => {
 					// Check for if image is set
 					let displayImage = card.image ? card.image : defaultImage;
 
 					return (
-						<article key={card.id} id={`${utils.handleize(card.name)}-${card.id}`} className="card card-block flex-nowrap">
+						<article key={card.id} id={card.id} className="card card-block flex-nowrap">
 							<div className="card-image">
 								<img src={displayImage} onError={imageError} loading="lazy" />
 							</div>
 
 							<div className="card-details">
-								{card.name && (
+								{card.label && (
 									<p className="card-details-name">
-										<strong>Name:</strong> {card.name}
+										<strong>Name:</strong> {card.label}
 									</p>
 								)}
 
@@ -44,13 +44,13 @@ const Cards = (props) => {
 
 								{Object.keys(filterList).map((filter) => {
 									// loop through the filterList to display the remaining details
-									let name = filterList[filter].name;
-									let value = card[filter];
+									const filterDetail = filterList[filter];
+									const cardValue = card[filter];
 
 									return (
-										utils.checkValue(value) && (
-											<p key={filter} className={`card-details-${filter}`}>
-												<strong>{name}:</strong> {String(value)}
+										utils.values.check(cardValue) && (
+											<p key={filterDetail.id} className={`card-details-${filterDetail.field}`}>
+												<strong>{filterDetail.label}:</strong> {String(cardValue)}
 											</p>
 										)
 									);

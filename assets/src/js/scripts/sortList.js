@@ -1,30 +1,39 @@
+// note: for consistency, always define order, id, field, label
 export const sortList = {
-	name01: {
-		id: 1,
-		field: 'name',
-		label: 'Name: A to Z',
-		direction: 'asc',
-		type: 'string',
+	labelAsc : {
+		order: 1,
+		id : 'label-1',
+		field : 'label',
+		label : 'Name: A to Z',
+		direction : 'asc',
+		type : 'string',
+		value : 'label:asc'
 	},
-	name02: {
-		id: 2,
-		field: 'name',
-		label: 'Name: Z to A',
-		direction: 'desc',
-		type: 'string',
+	labelDesc : {
+		order: 2,
+		id : 'label-2',
+		field : 'label',
+		label : 'Name: Z to A',
+		direction : 'desc',
+		type : 'string',
+		value : 'label:desc'
 	},
-	id01: {
-		id: 3,
-		field: 'id',
-		label: 'ID: Low to High',
-		direction: 'asc',
-		type: 'integer',
+	orderAsc : {
+		order: 3,
+		id : 'order-3',
+		field : 'order',
+		label : 'Order : Low to High',
+		direction : 'asc',
+		type : 'integer',
+		value : 'order:asc'
 	},
-	id02: {
-		id: 4,
-		field: 'id',
-		label: 'ID: High to Low',
-		direction: 'asc',
-		type: 'integer',
-	},
+	orderDesc : {
+		order: 4,
+		id : 'order-4',
+		field : 'order',
+		label : 'Order : High to Low',
+		direction : 'desc',
+		type : 'integer',
+		value : 'order:desc'
+	}
 };

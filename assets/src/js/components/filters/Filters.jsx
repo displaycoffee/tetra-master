@@ -17,32 +17,32 @@ const Filters = (props) => {
 		}
 
 		// run buildSelected function to refresh card list
-		buildSelected(true);
+		buildSelected();
 	}
 
 	return (
 		filters.length !== 0 && (
-			<div className="filters">
+			<div className="filter-list">
 				{filters.map((filter) => {
 					return (
 						filter.values.length !== 0 && (
-							<div key={filter.field} id={`filter-${filter.field}`} className="filter">
+							<div key={filter.id} id={filter.id} className="filter">
 								<div className="filter-header">
-									<h4>{filter.name}</h4>
+									<h4>{filter.label}</h4>
 								</div>
 
 								<div className="filter-options">
 									<div className="filter-list">
 										{filter.values.map((value) => {
 											return (
-												<div key={value.name} className={`filter-list-option${value.active ? ' is-active' : ''}`}>
+												<div key={value.id} className={`filter-list-option${value.active ? ' is-active' : ''}`}>
 													<a
 														className="filter-list-link pointer"
 														onClick={(e) => {
 															handleValue(e, filter.field, value);
 														}}
 													>
-														{value.name} <span className="value-count">({value.count})</span>
+														{value.label} <span className="value-count">({value.count})</span>
 													</a>
 												</div>
 											);
