@@ -1,5 +1,5 @@
 const Cards = (props) => {
-	const { cards, params, utils } = props;
+	const { cards, filterList, utils } = props;
 
 	// set default and on error image
 	const defaulImage = '/assets/dist/images/cactaur.png';
@@ -42,14 +42,14 @@ const Cards = (props) => {
 									</span>
 								</p>
 
-								{Object.keys(params).map((param) => {
-									// loop through the params to display the remaining details
-									let name = params[param].name;
-									let value = card[param];
+								{Object.keys(filterList).map((filter) => {
+									// loop through the filterList to display the remaining details
+									let name = filterList[filter].name;
+									let value = card[filter];
 
 									return (
 										utils.checkValue(value) && (
-											<p key={param} className={`card-details-${param}`}>
+											<p key={filter} className={`card-details-${filter}`}>
 												<strong>{name}:</strong> {String(value)}
 											</p>
 										)

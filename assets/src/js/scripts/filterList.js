@@ -1,4 +1,4 @@
-export const params = {
+export const filterList = {
 	dropped: {
 		name: 'Dropped By',
 	},
