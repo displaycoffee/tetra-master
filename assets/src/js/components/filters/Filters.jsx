@@ -18,7 +18,7 @@ const Filters = (props) => {
 		}
 
 		// run buildSelected function to refresh card list
-		buildSelected();
+		buildSelected(true);
 	}
 
 	return (

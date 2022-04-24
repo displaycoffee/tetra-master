@@ -6,21 +6,21 @@ import { cardList } from '../../scripts/cardList';
 import { params } from '../../scripts/params';
 import { utils } from '../../scripts/utils';
 
-/*local com ponent imports */
+/*local component imports */
 import Sidebar from './Sidebar';
 import Content from './Content';
 import NoResults from './NoResults';
 
-const App = () => {
+const Index = () => {
 	let [selected, setSelected] = useState([]);
 	let [cards, setCards] = useState(cardList);
 	let [filters, setFilters] = useState([]);
 
 	useEffect(() => {
-		buildSelected();
+		buildSelected(true);
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-	async function buildSelected() {
+	async function buildSelected(buildNext) {
 		// init paramsList from window location
 		const paramsList = utils.getParams() ? utils.getParams().split('&') : [];
 
@@ -54,13 +54,15 @@ const App = () => {
 		setSelected(selected);
 
 		// run buildCards after selected is done
-		const cardsResponse = await buildCards();
-		if (cardsResponse) {
-			setCards(cardsResponse);
+		if (buildNext) {
+			const cardsResponse = await buildCards(true);
+			if (cardsResponse) {
+				setCards(cardsResponse);
+			}
 		}
 	}
 
-	async function buildCards() {
+	async function buildCards(buildNext) {
 		// build modified cardList if selected has values
 		if (selected.length > 0) {
 			cards = cardList.filter((card) => {
@@ -82,9 +84,11 @@ const App = () => {
 		}
 
 		// run buildFilters after selected is done
-		const filtersResponse = await buildFilters();
-		if (cards && filtersResponse) {
-			setFilters(filtersResponse);
+		if (buildNext) {
+			const filtersResponse = await buildFilters();
+			if (cards && filtersResponse) {
+				setFilters(filtersResponse);
+			}
 		}
 
 		return cards;
@@ -157,4 +161,4 @@ const App = () => {
 	);
 };
 
-export default App;
+export default Index;

@@ -1,4 +1,4 @@
-/*local com ponent imports */
+/*local component imports */
 import Cards from '../cards/Cards';
 
 const Content = (props) => {

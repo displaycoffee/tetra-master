@@ -13,7 +13,7 @@ const Selected = (props) => {
 		utils.removeParam(selectedParams, field, value, setSelectedParams);
 
 		// run buildSelected function to refresh card list
-		buildSelected();
+		buildSelected(true);
 	}
 
 	// clear all values
@@ -24,7 +24,7 @@ const Selected = (props) => {
 		utils.clearParams(selectedParams, setSelectedParams);
 
 		// run buildSelected function to refresh card list
-		buildSelected();
+		buildSelected(true);
 	}
 
 	return (

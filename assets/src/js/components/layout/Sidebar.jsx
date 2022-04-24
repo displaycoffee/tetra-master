@@ -1,4 +1,4 @@
-/*local com ponent imports */
+/*local component imports */
 import Selected from '../filters/Selected';
 import Filters from '../filters/Filters';
 
