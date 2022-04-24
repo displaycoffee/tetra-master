@@ -1,14 +1,34 @@
 export const filterList = {
 	dropped: {
-		name: 'Dropped By',
+		id: 'dropped-1',
+		field: 'dropped',
+		label: 'Dropped By',
+		direction: 'asc',
+		type: 'string',
+		values: [],
 	},
 	won: {
-		name: 'Won From',
+		id: 'won-2',
+		field: 'won',
+		label: 'Won From',
+		direction: 'asc',
+		type: 'string',
+		values: [],
 	},
 	found: {
-		name: 'Found At',
+		id: 'found-3',
+		field: 'found',
+		label: 'Found At',
+		direction: 'asc',
+		type: 'string',
+		values: [],
 	},
 	missable: {
-		name: 'Missable',
+		id: 'missable-4',
+		field: 'missable',
+		label: 'Missable',
+		direction: 'desc',
+		type: 'boolean',
+		values: [],
 	},
 };

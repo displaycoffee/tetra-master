@@ -9,17 +9,17 @@ const Content = (props) => {
 	let { cards, filterList, utils } = props;
 
 	function runSort() {
-		const paramsList = utils.getParams() ? utils.getParams().split('&') : [];
+		const paramsList = utils.params.get() ? utils.params.get().split('&') : [];
 		const sortIdentifier = 'sort=';
 		let sortParam = false;
 
 		if (paramsList.length > 0) {
-			// configure sortParam
+			// configure sort parameters
 			sortParam = paramsList.map((param) => {
 				let paramValues = param.replace(sortIdentifier, '').split(':');
 				let sortConfig = false;
 
-				// param pairs should contain two items, be in sortList config, and have asc or desc direction
+				// parameter pairs should contain two items, be in sortList config, and have asc or desc direction
 				if (paramValues.length > 1) {
 					const paramField = paramValues[0];
 					const paramDirection = paramValues[1];
@@ -61,7 +61,7 @@ const Content = (props) => {
 				{cards.length} card{cards.length == 1 ? '' : 's'} found
 			</h2>
 
-			<Sort sortList={sortList} />
+			{/* <Sort sortList={sortList} /> */}
 
 			<Cards cards={cards} filterList={filterList} utils={utils} />
 		</section>

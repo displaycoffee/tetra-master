@@ -19,57 +19,80 @@ export let utils = {
 			.replace(/\s/g, '-')
 			.trim();
 	},
-	getParams: () => {
-		return decodeURIComponent(window.location.search.replace(/^\?/, '').replace(/\+/g, ' ')).toLowerCase();
-	},
-	addParam: (params, field, value, paramsCallback) => {
-		let newParams = new URLSearchParams(String(params));
+	params: {
+		// functions for maniuplating parameters
+		get: () => {
+			// get decoded parameters from window location
+			return decodeURIComponent(window.location.search.replace(/^\?/, '').replace(/\+/g, ' ')).toLowerCase();
+		},
+		list: () => {
+			// return array of parameters
+			return utils.params.get() ? utils.params.get().split('&') : [];
+		},
+		config: (id, field, label, type) => {
+			// base config properties for parameters
+			return {
+				id: id ? id : `no-field-${Date.now()}`,
+				field: field ? field : false,
+				label: label ? label : false,
+				type: type ? type : false,
+			};
+		},
+		add: (params, field, value, callback) => {
+			let newParams = new URLSearchParams(String(params));
 
-		// append new params to url
-		newParams.append(field, value);
+			// append new parameters to url
+			newParams.append(field, value);
 
-		// set new params to state
-		paramsCallback(String(newParams));
-	},
-	removeParam: (params, field, value, paramsCallback) => {
-		let newParams = new URLSearchParams(String(params));
+			// run callback if defined
+			if (callback) {
+				callback(String(newParams));
+			}
+		},
+		remove: (params, field, value, callback) => {
+			let newParams = new URLSearchParams(String(params));
 
-		// filter out values which should be retained
-		const keepParams = newParams.getAll(field).filter((keep) => {
-			return !utils.compareValues(keep, value);
-		});
-
-		// delete field from params
-		newParams.delete(field);
-
-		// add back params with deleted field
-		keepParams.forEach((keep) => {
-			newParams.append(field, keep);
-		});
-
-		// set new params to state
-		paramsCallback(String(newParams));
-	},
-	clearParams: (params, paramsCallback) => {
-		let newParams = new URLSearchParams(String(params));
-
-		// get list of param values
-		const removeParams = String(params)
-			.split('&')
-			.map((remove) => {
-				return remove.split('=')[0];
+			// filter out values which should be retained
+			const keepParams = newParams.getAll(field).filter((keep) => {
+				return !utils.compareValues(keep, value);
 			});
 
-		// get unique params
-		const getUnique = [...new Set(removeParams)];
+			// delete field from parameters
+			newParams.delete(field);
 
-		// delete field params
-		getUnique.forEach((remove) => {
-			newParams.delete(remove);
-		});
+			// add parameters without deleted field
+			keepParams.forEach((keep) => {
+				newParams.append(field, keep);
+			});
 
-		// set new params to state
-		paramsCallback(String(newParams));
+			// run callback if defined
+			if (callback) {
+				callback(String(newParams));
+			}
+		},
+		clear: (params, callback) => {
+			let newParams = new URLSearchParams(String(params));
+
+			// get list of parameter values
+			const removeParams = String(params)
+				.split('&')
+				.map((remove) => {
+					return remove.split('=')[0];
+				});
+
+			// get unique parameters
+			const getUnique = [...new Set(removeParams)];
+
+			// delete field parameters
+			getUnique.forEach((remove) => {
+				newParams.delete(remove);
+			});
+
+			// run callback if defined
+			if (callback) {
+				callback(String(newParams));
+			}
+		},
 	},
 	sortValues: (list, type, field, direction) => {
 		// sort values in a list based on type, field, and direction

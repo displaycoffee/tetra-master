@@ -5,16 +5,15 @@ const Filters = (props) => {
 	let { filters, utils, buildSelected } = props;
 	let [filterParams, setFilterParams] = useSearchParams();
 
-	// add or remove params from url, then rebuild display
 	function handleValue(e, field, value) {
 		e.preventDefault();
 
 		if (value.active) {
-			// remove filter params from url
-			utils.removeParam(filterParams, field, value.value, setFilterParams);
+			// remove filter parameters from url
+			utils.params.remove(filterParams, field, value.value, setFilterParams);
 		} else {
-			// add filter params to url
-			utils.addParam(filterParams, field, value.value, setFilterParams);
+			// add filter parameters to url
+			utils.params.add(filterParams, field, value.value, setFilterParams);
 		}
 
 		// run buildSelected function to refresh card list
