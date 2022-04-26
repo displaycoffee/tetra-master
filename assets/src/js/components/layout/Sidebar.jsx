@@ -1,15 +1,15 @@
 /*local component imports */
-import Selected from '../filters/Selected';
+import Selections from '../filters/Selections';
 import Filters from '../filters/Filters';
 
 const Sidebar = (props) => {
-	let { filters, utils, selected, buildSelected } = props;
+	let { filters, utils, selections, buildSelections } = props;
 
 	return (
 		<aside className="layout-column layout-sidebar">
-			<Selected selected={selected} utils={utils} buildSelected={buildSelected} />
+			<Selections selections={selections} utils={utils} buildSelections={buildSelections} />
 
-			<Filters filters={filters} utils={utils} buildSelected={buildSelected} />
+			<Filters filters={filters} utils={utils} buildSelections={buildSelections} />
 		</aside>
 	);
 };

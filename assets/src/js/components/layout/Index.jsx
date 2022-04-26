@@ -13,20 +13,20 @@ import Content from './Content';
 import NoResults from './NoResults';
 
 const Index = () => {
-	let [selected, setSelected] = useState([]);
+	let [selections, setSelections] = useState([]);
 	let [cards, setCards] = useState([]);
 	let [filters, setFilters] = useState([]);
 
 	useEffect(() => {
-		buildSelected();
+		buildSelections();
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-	async function buildSelected() {
-		// set selected to state
-		selected = builds.selected(utils, selected, filterList);
-		setSelected(selected);
+	async function buildSelections() {
+		// set selections to state
+		selections = builds.selections(utils, selections, filterList);
+		setSelections(selections);
 
-		// run buildCards after selected is done
+		// run buildCards after selections is done
 		const cardsResponse = await buildCards();
 		if (cardsResponse) {
 			setCards(cardsResponse);
@@ -35,10 +35,10 @@ const Index = () => {
 
 	async function buildCards() {
 		// set cards filters to state
-		cards = builds.cards(utils, selected, cardList);
+		cards = builds.cards(utils, selections, cardList);
 		setCards(cards);
 
-		// run buildFilters after selected is done
+		// run buildFilters after selections is done
 		const filtersResponse = await builds.filters(utils, cards, filterList);
 		if (cards && filtersResponse) {
 			setFilters(filtersResponse);
@@ -51,7 +51,7 @@ const Index = () => {
 				<div className="layout-row flex-nowrap">
 					{cards.length !== 0 ? (
 						<>
-							<Sidebar filters={filters} utils={utils} selected={selected} buildSelected={buildSelected} />
+							<Sidebar filters={filters} utils={utils} selections={selections} buildSelections={buildSelections} />
 
 							<Content cards={cards} filterList={filterList} utils={utils} />
 						</>

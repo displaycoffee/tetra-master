@@ -13,10 +13,10 @@ const Content = (props) => {
 
 		if (paramsList.length > 0) {
 			const sortIdentifier = 'sort=';
-			let sortSelected = false;
+			let sortSelections = false;
 
 			// configure sort parameters
-			sortSelected = paramsList.map((param) => {
+			sortSelections = paramsList.map((param) => {
 				if (param.includes(sortIdentifier)) {			
 					let paramValues = param.replace(sortIdentifier, '').split(':');
 					let sortDetail = false;
@@ -37,13 +37,13 @@ const Content = (props) => {
 			});
 
 			// filter invalid sort elements (will take last valid applied parameter)
-			sortSelected = sortSelected.filter((sort) => {
+			sortSelections = sortSelections.filter((sort) => {
 				return sort;
 			}).pop();
 			
-			if (sortSelected) {
+			if (sortSelections) {
 				// apply sort to card list
-				cards = utils.values.sort(cards, sortSelected.type, sortSelected.field, sortSelected.direction);
+				cards = utils.values.sort(cards, sortSelections.type, sortSelections.field, sortSelections.direction);
 			}
 		}		
 	}

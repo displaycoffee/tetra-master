@@ -9,7 +9,7 @@ const Cards = (props) => {
 
 	return (
 		cards.length !== 0 && (
-			<div className="card-list flex-wrap">
+			<div className="cards flex-wrap">
 				{cards.map((card) => {
 					// Check for if image is set
 					let displayImage = card.image ? card.image : defaultImage;
