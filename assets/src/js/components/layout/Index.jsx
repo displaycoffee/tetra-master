@@ -53,7 +53,7 @@ const Index = () => {
 						<>
 							<Sidebar filters={filters} utils={utils} selections={selections} buildSelections={buildSelections} />
 
-							<Content cards={cards} filterList={filterList} utils={utils} />
+							<Content cards={cards} filterList={filterList} utils={utils} builds={builds} />
 						</>
 					) : (
 						<NoResults />

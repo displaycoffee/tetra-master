@@ -1,3 +1,6 @@
+/* react imports */
+import { useState, useEffect } from 'react';
+
 /* local script imports */
 import { sortList } from '../../scripts/sortList';
 
@@ -6,50 +9,29 @@ import Sort from '../toolbar/Sort';
 import Cards from '../cards/Cards';
 
 const Content = (props) => {
-	let { cards, filterList, utils } = props;
+	let { cards, filterList, utils, builds } = props;
+	let [sorts, setSorts] = useState([]);
 
-	function sortCards() {
-		const paramsList = utils.params.list();
+	useEffect(() => {
+		buildSorts();
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-		if (paramsList.length > 0) {
-			const sortIdentifier = 'sort=';
-			let sortSelections = false;
+	async function buildSorts() {
+		// set sorts to state
+		sorts = builds.sort(utils, sorts, sortList);
+		setSorts(sorts);
 
-			// configure sort parameters
-			sortSelections = paramsList.map((param) => {
-				if (param.includes(sortIdentifier)) {			
-					let paramValues = param.replace(sortIdentifier, '').split(':');
-					let sortDetail = false;
-
-					// parameter pairs should contain two items, be in sortList config, and have asc or desc direction
-					if (paramValues.length > 1) {					
-						const paramValue = paramValues[1];
-						const paramField = paramValues[0] + paramValue.charAt(0).toUpperCase() + paramValue.slice(1);
-						const paramDetail = sortList[paramField] ? sortList[paramField] : false;
-
-						if (paramDetail && (paramValue == 'asc' || paramValue == 'desc')) {
-							sortDetail = paramDetail;
-						}
-					}
-					
-					return sortDetail;
-				}
-			});
-
-			// filter invalid sort elements (will take last valid applied parameter)
-			sortSelections = sortSelections.filter((sort) => {
-				return sort;
+		// sort after selections is done
+		if (sorts && utils.params.get().includes('sort=')) {
+			const sortActive = sorts.filter((sort) => {
+				return sort.active;
 			}).pop();
 			
-			if (sortSelections) {
-				// apply sort to card list
-				cards = utils.values.sort(cards, sortSelections.type, sortSelections.field, sortSelections.direction);
+			if (sortActive) {
+				cards = utils.values.sort(cards, sortActive.type, sortActive.field, sortActive.direction);
 			}
-		}		
+		}
 	}
-
-	// run sorting for card list
-	sortCards();
 
 	return (
 		<section className="layout-column layout-content cards-found">
