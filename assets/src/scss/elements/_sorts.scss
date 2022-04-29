@@ -1,0 +1,24 @@
+// Use helpers and theme variables
+@use '../helpers/_mixins';
+@use '../theme/_theme';
+
+//// SORTS
+//// --------------------------------------------------------------------------
+
+.sorts {
+	.sort-list {
+		.sort-list-option {
+			&.is-active {
+				.sort-list-link {
+					color: theme.$color-04;
+					font-weight: theme.$font-weight;
+				}
+			}
+			.sort-list-link {
+				.value-count {
+					font-size: mixins.em(12px, rem);
+				}
+			}
+		}
+	}
+}

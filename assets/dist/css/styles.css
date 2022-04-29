@@ -381,14 +381,6 @@ body {
   flex: 1 1 0%;
 }
 
-.filters .filter .filter-options .filter-list .filter-list-option.is-active .filter-list-link {
-  color: #f1f169;
-  font-weight: bold;
-}
-.filters .filter .filter-options .filter-list .filter-list-option .filter-list-link .value-count {
-  font-size: 0.75rem;
-}
-
 .cards {
   margin: 0 -10px;
 }
@@ -428,4 +420,20 @@ body {
 }
 .cards .card .card-details > p:last-child {
   margin-bottom: 0;
+}
+
+.sorts .sort-list .sort-list-option.is-active .sort-list-link {
+  color: #f1f169;
+  font-weight: bold;
+}
+.sorts .sort-list .sort-list-option .sort-list-link .value-count {
+  font-size: 0.75rem;
+}
+
+.filters .filter .filter-options .filter-list .filter-list-option.is-active .filter-list-link {
+  color: #f1f169;
+  font-weight: bold;
+}
+.filters .filter .filter-options .filter-list .filter-list-option .filter-list-link .value-count {
+  font-size: 0.75rem;
 }

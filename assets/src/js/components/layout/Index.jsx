@@ -70,7 +70,7 @@ const Index = () => {
 						<>
 							<Sidebar utils={utils} buildSelections={buildSelections} selections={selections} filters={filters} />
 
-							<Content utils={utils} cards={cards} sorts={sorts} filterList={filterList} />
+							<Content utils={utils}  buildSelections={buildSelections} cards={cards} sorts={sorts} filterList={filterList} />
 						</>
 					) : (
 						<NoResults />
