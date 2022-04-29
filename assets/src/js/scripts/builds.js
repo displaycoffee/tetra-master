@@ -1,18 +1,4 @@
 export let builds = {
-	sort : (utils, sorts, sortList) => {
-		sorts = utils.flatten(sortList);
-
-		// build modified sortList
-		if (sorts.length > 0) {
-			// loop through sorts
-			sorts = sorts.filter((sort) => {
-				sort.active = utils.params.get().includes(`sort=${sort.value}`); // check if active by looking at params
-				return sort;
-			});
-		}
-		
-		return sorts;
-	},
 	selections : (utils, selections, filterList) => {
 		const paramsList = utils.params.list();
 
@@ -72,6 +58,20 @@ export let builds = {
 
 		return cards;
 	},
+	sorts : (utils, sortList) => {
+		let sorts = utils.flatten(sortList);
+
+		// build modified sortList
+		if (sorts.length > 0) {
+			// loop through sorts
+			sorts = sorts.filter((sort) => {
+				sort.active = utils.params.get().includes(`sort=${sort.value}`); // check if active by looking at params
+				return sort;
+			});
+		}
+		
+		return sorts;
+	},	
 	filters : (utils, cards, filterList) => {
 		let filters = utils.flatten(filterList);
 

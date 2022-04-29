@@ -22,7 +22,7 @@ export const sortList = {
 		order: 3,
 		id : 'order-3',
 		field : 'order',
-		label : 'Order : Low to High',
+		label : 'Order: Low to High',
 		direction : 'asc',
 		type : 'integer',
 		value : 'order:asc'
@@ -31,7 +31,7 @@ export const sortList = {
 		order: 4,
 		id : 'order-4',
 		field : 'order',
-		label : 'Order : High to Low',
+		label : 'Order: High to Low',
 		direction : 'desc',
 		type : 'integer',
 		value : 'order:desc'

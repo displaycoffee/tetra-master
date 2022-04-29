@@ -1,12 +1,11 @@
 const Sort = (props) => {
-	const { sortList, utils } = props;
-	const sortValues = utils.flatten(sortList);
+	const { utils, sorts } = props;
 
 	return (
-		sortValues.length !== 0 && (
-			<div className="sort-list">
-				{sortValues.map((value) => {
-					return <a key={value.id}>{value.label}</a>;
+		sorts.length !== 0 && (
+			<div className="sorts">
+				{sorts.map((sort) => {
+					return <a key={sort.id}>{sort.label}</a>;
 				})}
 			</div>
 		)

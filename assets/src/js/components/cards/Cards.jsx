@@ -1,5 +1,5 @@
 const Cards = (props) => {
-	const { cards, filterList, utils } = props;
+	let { utils, cards, filterList } = props;
 
 	// set default and on error image
 	const defaulImage = '/assets/dist/images/cactaur.png';

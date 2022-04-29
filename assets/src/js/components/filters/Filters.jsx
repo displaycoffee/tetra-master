@@ -2,7 +2,7 @@
 import { useSearchParams } from 'react-router-dom';
 
 const Filters = (props) => {
-	let { filters, utils, buildSelections } = props;
+	let { utils, buildSelections, filters } = props;
 	let [filterParams, setFilterParams] = useSearchParams();
 
 	function handleValue(e, field, value) {
