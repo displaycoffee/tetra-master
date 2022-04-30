@@ -8,6 +8,9 @@ const Filters = (props) => {
 	function handleValue(e, field, value) {
 		e.preventDefault();
 
+		// page paramters should be removed when filters are set
+		filterParams.delete(utils.params.url.page);
+
 		if (value.active) {
 			// remove filter parameters from url
 			utils.params.remove(filterParams, field, value.value, setFilterParams);

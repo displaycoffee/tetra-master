@@ -31,7 +31,7 @@ const Sort = (props) => {
 								<a
 									className="sort-list-link pointer"
 									onClick={(e) => {
-										handleValue(e, 'sort', sort);
+										handleValue(e, utils.params.url.sort, sort);
 									}}
 								>
 									{sort.label}

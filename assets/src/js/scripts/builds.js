@@ -70,7 +70,7 @@ export let builds = {
 		}
 
 		// sort cards as needed
-		if (sorts && utils.params.get().includes('sort=')) {
+		if (sorts && utils.params.get().includes(`${utils.params.url.sort}=`)) {
 			// get active sort
 			const sortActive = sorts.filter((sort) => {
 				return sort.active;

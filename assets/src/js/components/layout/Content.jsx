@@ -1,3 +1,6 @@
+/* react imports */
+import { useState, useEffect } from 'react';
+
 /*local component imports */
 import Sort from '../toolbar/Sort';
 import Pagination from '../toolbar/Pagination';
@@ -5,23 +8,58 @@ import Cards from '../cards/Cards';
 
 const Content = (props) => {
 	let { utils, buildResponse, sorts, cards, filterList } = props;
+	let [pages, setPages] = useState({});
+	let [paginated, setPaginated] = useState([]);
+	let [loading, setLoading] = useState(true);
 
-	let pagesTotal = Math.ceil(cards.length / 3);
-	let pages = {
-		perPage : 3,
-		total : pagesTotal,
-		range : [...(new Array(pagesTotal))].map((_, i) => i + 1),
-		current: 1
+	// set staticPages config with properties that don't change
+	const staticPages = {
+		size : 3, // number of cards per row
+		build : (list) => {
+			// build paginated list
+			const pageStart = ((pages.current - 1) * pages.size);
+			const pageEnd = (pageStart + pages.size);			
+			return list.slice(pageStart, pageEnd);
+		}
 	};
-	let paginatedCards = cards;
-	//console.log(pages)
 
-	// if 3 items per page
-	// 1 : slice(0, 3),  goblin, fang, skeleton
-	// 2 : slice(3, 6),  flan, saghnol, lizardman
-	// 3 : slice(6, 9),  zombie, bomb, ironite
-	// 4 : slice(9, 12), sahagin, yeti, memic
-	// 3 - 1 = 2 * 3 = 6 + 3 = 9
+	useEffect(() => {
+		buildPages();
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+	async function buildPages() {
+		// reset loading whenever buildPages is called
+		loading = true;
+		setLoading(true);
+		
+		if (loading) {
+			// set up search params for pagination
+			let pageParams = utils.params.get();
+			let newParams = new URLSearchParams(String(pageParams));
+
+			// create pages config
+			pages = staticPages;
+			pages.total = Math.ceil(cards.length / pages.size); // total number of pages
+			pages.range = [...(new Array(pages.total))].map((_, i) => i + 1); // array of numbers with all pages
+			if (pageParams.includes(`${utils.params.url.page}=`) && newParams.get(utils.params.url.page)) {
+				pages.current = Number(newParams.get(utils.params.url.page));
+			} else {
+				pages.current = 1;
+			}
+			setPages(pages);
+
+			// set display of paginated cards
+			paginated = await pages.build(cards);
+			if (paginated) {
+				setPaginated(paginated);
+			}
+
+			// set loading to false
+			setTimeout(() => {
+				setLoading(false);
+			});
+		}
+	}
 
 	return (
 		<section className="layout-column layout-content cards-found">
@@ -31,9 +69,9 @@ const Content = (props) => {
 
 			<Sort utils={utils} buildResponse={buildResponse} sorts={sorts} />
 
-			<Pagination utils={utils} buildResponse={buildResponse} sorts={sorts} />
+			<Pagination utils={utils} buildPages={buildPages} pages={pages} />
 
-			<Cards utils={utils} cards={paginatedCards} filterList={filterList} />
+			<Cards utils={utils} cards={paginated} filterList={filterList} />
 		</section>
 	);
 };

@@ -15,6 +15,12 @@ export let utils = {
 	},
 	params: {
 		// functions for maniuplating parameters
+		url : {
+			// parameter mapping for urls
+			sort : 'sort',
+			page : 'page',
+			filter : 'filter',
+		},
 		get : () => {
 			// get decoded parameters from window location
 			return decodeURIComponent(window.location.search.replace(/^\?/, '').replace(/\+/g, ' ')).toLowerCase();

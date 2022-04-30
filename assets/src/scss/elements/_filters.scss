@@ -12,12 +12,6 @@
 		.filter-options {
 			.filter-list {
 				.filter-list-option {
-					&.is-active {
-						.filter-list-link {
-							color: theme.$color-04;
-							font-weight: theme.$font-weight;
-						}
-					}
 					.filter-list-link {
 						.value-count {
 							font-size: mixins.em(12px, rem);

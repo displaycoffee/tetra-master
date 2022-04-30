@@ -225,6 +225,11 @@ a:active, a:hover {
   color: #ffffff;
 }
 
+.is-active * {
+  color: #f1f169;
+  font-weight: bold;
+}
+
 h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h6, .h6 {
   font-family: "Garamond", "Times New Roman", serif;
   color: #ffffff;
@@ -422,18 +427,10 @@ body {
   margin-bottom: 0;
 }
 
-.sorts .sort-list .sort-list-option.is-active .sort-list-link {
-  color: #f1f169;
-  font-weight: bold;
-}
 .sorts .sort-list .sort-list-option .sort-list-link .value-count {
   font-size: 0.75rem;
 }
 
-.filters .filter .filter-options .filter-list .filter-list-option.is-active .filter-list-link {
-  color: #f1f169;
-  font-weight: bold;
-}
 .filters .filter .filter-options .filter-list .filter-list-option .filter-list-link .value-count {
   font-size: 0.75rem;
 }
