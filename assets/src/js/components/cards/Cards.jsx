@@ -1,5 +1,5 @@
 const Cards = (props) => {
-	const { cards, filterList, utils } = props;
+	let { utils, cards, filterList } = props;
 
 	// set default and on error image
 	const defaulImage = '/assets/dist/images/cactaur.png';
@@ -9,7 +9,7 @@ const Cards = (props) => {
 
 	return (
 		cards.length !== 0 && (
-			<div className="card-list flex-wrap">
+			<div className="cards flex-wrap">
 				{cards.map((card) => {
 					// Check for if image is set
 					let displayImage = card.image ? card.image : defaultImage;

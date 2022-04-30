@@ -2,11 +2,14 @@
 import { useSearchParams } from 'react-router-dom';
 
 const Filters = (props) => {
-	let { filters, utils, buildSelected } = props;
+	let { utils, buildResponse, filters } = props;
 	let [filterParams, setFilterParams] = useSearchParams();
 
 	function handleValue(e, field, value) {
 		e.preventDefault();
+
+		// page paramters should be removed when filters are set
+		filterParams.delete(utils.params.url.page);
 
 		if (value.active) {
 			// remove filter parameters from url
@@ -16,13 +19,13 @@ const Filters = (props) => {
 			utils.params.add(filterParams, field, value.value, setFilterParams);
 		}
 
-		// run buildSelected function to refresh card list
-		buildSelected();
+		// run buildResponse function to refresh card list
+		buildResponse();
 	}
 
 	return (
 		filters.length !== 0 && (
-			<div className="filter-list">
+			<div className="filters">
 				{filters.map((filter) => {
 					return (
 						filter.values.length !== 0 && (

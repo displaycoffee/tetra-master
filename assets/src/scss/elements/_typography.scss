@@ -73,6 +73,13 @@ a {
 	}
 }
 
+.is-active {
+	* {
+		color: theme.$color-04;
+		font-weight: theme.$font-weight;
+	}
+}
+
 //// HEADERS
 //// --------------------------------------------------------------------------
 

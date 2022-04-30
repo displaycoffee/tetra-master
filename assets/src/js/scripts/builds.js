@@ -1,12 +1,13 @@
 export let builds = {
-	selected : (utils, selected, filterList) => {
-		const paramsList = utils.params.list();
+	selections : (utils, filterList) => {
+		let selections = [];
+		const paramsList = utils.params.list();		
 
 		if (paramsList.length > 0) {
-			// configure selected
-			selected = paramsList.map((param, index) => {
+			// configure selections
+			selections = paramsList.map((param, index) => {
 				let paramValues = param.split('=');
-				let selectedDetail = false;
+				let selectionDetail = false;
 
 				// parameter pairs should contain two items and be in filterList config
 				if (paramValues.length > 1) {
@@ -17,32 +18,44 @@ export let builds = {
 
 					if (paramDetail) {
 						const paramId = `${paramDetail.id}-${indexAdjust}`;
-						selectedDetail = utils.params.config(indexAdjust, paramId, paramField, paramDetail.label);
-						selectedDetail.value = paramValue;
+						selectionDetail = utils.params.config(indexAdjust, paramId, paramField, paramDetail.label);
+						selectionDetail.value = paramValue;
 					}
 				}
 
-				return selectedDetail;
+				return selectionDetail;
 			});
 
-			// filter invalid selected elements
-			selected = selected.filter((select) => {
+			// filter invalid selections elements
+			selections = selections.filter((select) => {
 				return select;
 			});
-		} else {
-			selected = [];
 		}
-
-		return selected;
+		
+		return selections;
 	},
-	cards : (utils, selected, cardList) => {
+	sorts : (utils, sortList) => {
+		let sorts = utils.flatten(sortList);
+
+		// build modified sortList
+		if (sorts.length > 0) {
+			// loop through sorts
+			sorts = sorts.filter((sort) => {
+				sort.active = utils.params.get().includes(`sort=${sort.value}`); // check if active by looking at params
+				return sort;
+			});
+		}
+		
+		return sorts;
+	},	
+	cards : (utils, selections, sorts, cardList) => {
 		let cards = utils.flatten(cardList);
 
-		// build modified cardList if selected has values
-		if (selected.length > 0) {
+		// build modified cardList if selections has values
+		if (selections.length > 0) {
 			cards = cards.filter((card) => {
-				// loop through selected values for each card
-				let cardActive = selected.some((select) => {
+				// loop through selections values for each card
+				let cardActive = selections.some((select) => {
 					const valuesList = utils.setArray(card[select.field]);
 
 					// further, we need to check all values in the cards current field
@@ -55,6 +68,19 @@ export let builds = {
 				return cardActive;
 			});
 		}
+
+		// sort cards as needed
+		if (sorts && utils.params.get().includes(`${utils.params.url.sort}=`)) {
+			// get active sort
+			const sortActive = sorts.filter((sort) => {
+				return sort.active;
+			}).pop();
+			
+			// run sort function
+			if (sortActive) {
+				cards = utils.values.sort(cards, sortActive.type, sortActive.field, sortActive.direction);
+			}
+		}	
 
 		return cards;
 	},
@@ -107,5 +133,5 @@ export let builds = {
 		}
 
 		return filters;
-	},
+	}
 };

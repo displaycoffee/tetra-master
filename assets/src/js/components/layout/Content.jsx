@@ -1,55 +1,65 @@
-/* local script imports */
-import { sortList } from '../../scripts/sortList';
+/* react imports */
+import { useState, useEffect } from 'react';
 
 /*local component imports */
 import Sort from '../toolbar/Sort';
+import Pagination from '../toolbar/Pagination';
 import Cards from '../cards/Cards';
 
 const Content = (props) => {
-	let { cards, filterList, utils } = props;
+	let { utils, buildResponse, sorts, cards, filterList } = props;
+	let [pages, setPages] = useState({});
+	let [paginated, setPaginated] = useState([]);
+	let [loading, setLoading] = useState(true);
 
-	function sortCards() {
-		const paramsList = utils.params.list();
+	// set staticPages config with properties that don't change
+	const staticPages = {
+		size : 3, // number of cards per row
+		build : (list) => {
+			// build paginated list
+			const pageStart = ((pages.current - 1) * pages.size);
+			const pageEnd = (pageStart + pages.size);			
+			return list.slice(pageStart, pageEnd);
+		}
+	};
 
-		if (paramsList.length > 0) {
-			const sortIdentifier = 'sort=';
-			let sortSelected = false;
+	useEffect(() => {
+		buildPages();
+	}, []); // eslint-disable-line react-hooks/exhaustive-deps
 
-			// configure sort parameters
-			sortSelected = paramsList.map((param) => {
-				if (param.includes(sortIdentifier)) {			
-					let paramValues = param.replace(sortIdentifier, '').split(':');
-					let sortDetail = false;
+	async function buildPages() {
+		// reset loading whenever buildPages is called
+		loading = true;
+		setLoading(true);
+		
+		if (loading) {
+			// set up search params for pagination
+			let pageParams = utils.params.get();
+			let newParams = new URLSearchParams(String(pageParams));
 
-					// parameter pairs should contain two items, be in sortList config, and have asc or desc direction
-					if (paramValues.length > 1) {					
-						const paramValue = paramValues[1];
-						const paramField = paramValues[0] + paramValue.charAt(0).toUpperCase() + paramValue.slice(1);
-						const paramDetail = sortList[paramField] ? sortList[paramField] : false;
-
-						if (paramDetail && (paramValue == 'asc' || paramValue == 'desc')) {
-							sortDetail = paramDetail;
-						}
-					}
-					
-					return sortDetail;
-				}
-			});
-
-			// filter invalid sort elements (will take last valid applied parameter)
-			sortSelected = sortSelected.filter((sort) => {
-				return sort;
-			}).pop();
-			
-			if (sortSelected) {
-				// apply sort to card list
-				cards = utils.values.sort(cards, sortSelected.type, sortSelected.field, sortSelected.direction);
+			// create pages config
+			pages = staticPages;
+			pages.total = Math.ceil(cards.length / pages.size); // total number of pages
+			pages.range = [...(new Array(pages.total))].map((_, i) => i + 1); // array of numbers with all pages
+			if (pageParams.includes(`${utils.params.url.page}=`) && newParams.get(utils.params.url.page)) {
+				pages.current = Number(newParams.get(utils.params.url.page));
+			} else {
+				pages.current = 1;
 			}
-		}		
-	}
+			setPages(pages);
 
-	// run sorting for card list
-	sortCards();
+			// set display of paginated cards
+			paginated = await pages.build(cards);
+			if (paginated) {
+				setPaginated(paginated);
+			}
+
+			// set loading to false
+			setTimeout(() => {
+				setLoading(false);
+			});
+		}
+	}
 
 	return (
 		<section className="layout-column layout-content cards-found">
@@ -57,9 +67,11 @@ const Content = (props) => {
 				{cards.length} card{cards.length == 1 ? '' : 's'} found
 			</h2>
 
-			<Sort sortList={sortList} utils={utils} />
+			<Sort utils={utils} buildResponse={buildResponse} sorts={sorts} />
 
-			<Cards cards={cards} filterList={filterList} utils={utils} />
+			<Pagination utils={utils} buildPages={buildPages} pages={pages} />
+
+			<Cards utils={utils} cards={paginated} filterList={filterList} />
 		</section>
 	);
 };
