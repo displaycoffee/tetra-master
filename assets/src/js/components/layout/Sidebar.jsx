@@ -3,13 +3,13 @@ import Selections from '../filters/Selections';
 import Filters from '../filters/Filters';
 
 const Sidebar = (props) => {
-	let { utils, buildSelections, selections, filters } = props;
+	let { utils, buildResponse, selections, filters } = props;
 
 	return (
 		<aside className="layout-column layout-sidebar">
-			<Selections utils={utils} buildSelections={buildSelections} selections={selections} />
+			<Selections utils={utils} buildResponse={buildResponse} selections={selections} />
 
-			<Filters utils={utils} buildSelections={buildSelections} filters={filters} />
+			<Filters utils={utils} buildResponse={buildResponse} filters={filters} />
 		</aside>
 	);
 };

@@ -2,7 +2,7 @@
 import { useSearchParams } from 'react-router-dom';
 
 const Sort = (props) => {
-	const { utils, buildSelections, sorts } = props;
+	const { utils, buildResponse, sorts } = props;
 	let [sortParams, setSortParams] = useSearchParams();
 
 	function handleValue(e, field, value) {
@@ -17,8 +17,8 @@ const Sort = (props) => {
 			utils.params.add(sortParams, field, value.value, setSortParams);
 		}
 
-		// run buildSelections function to refresh card list
-		buildSelections();
+		// run buildResponse function to refresh card list
+		buildResponse();
 	}
 
 	return (

@@ -2,7 +2,7 @@
 import { useSearchParams } from 'react-router-dom';
 
 const Selections = (props) => {
-	let { utils, buildSelections, selections } = props;
+	let { utils, buildResponse, selections } = props;
 	let [selectionParams, setSelectionParams] = useSearchParams();
 
 	function handleValue(e, field, value) {
@@ -11,8 +11,8 @@ const Selections = (props) => {
 		// remove filter parameters from url
 		utils.params.remove(selectionParams, field, value, setSelectionParams);
 
-		// run buildSelections function to refresh card list
-		buildSelections();
+		// run buildResponse function to refresh card list
+		buildResponse();
 	}
 
 	function handleClear(e) {
@@ -21,8 +21,8 @@ const Selections = (props) => {
 		// clear all parameters from url
 		utils.params.clear(selectionParams, setSelectionParams);
 
-		// run buildSelections function to refresh card list
-		buildSelections();
+		// run buildResponse function to refresh card list
+		buildResponse();
 	}
 
 	return (

@@ -1,6 +1,7 @@
 export let builds = {
-	selections : (utils, selections, filterList) => {
-		const paramsList = utils.params.list();
+	selections : (utils, filterList) => {
+		let selections = [];
+		const paramsList = utils.params.list();		
 
 		if (paramsList.length > 0) {
 			// configure selections
@@ -29,13 +30,25 @@ export let builds = {
 			selections = selections.filter((select) => {
 				return select;
 			});
-		} else {
-			selections = [];
 		}
-
+		
 		return selections;
 	},
-	cards : (utils, selections, cardList) => {
+	sorts : (utils, sortList) => {
+		let sorts = utils.flatten(sortList);
+
+		// build modified sortList
+		if (sorts.length > 0) {
+			// loop through sorts
+			sorts = sorts.filter((sort) => {
+				sort.active = utils.params.get().includes(`sort=${sort.value}`); // check if active by looking at params
+				return sort;
+			});
+		}
+		
+		return sorts;
+	},	
+	cards : (utils, selections, sorts, cardList) => {
 		let cards = utils.flatten(cardList);
 
 		// build modified cardList if selections has values
@@ -56,22 +69,21 @@ export let builds = {
 			});
 		}
 
+		// sort cards as needed
+		if (sorts && utils.params.get().includes('sort=')) {
+			// get active sort
+			const sortActive = sorts.filter((sort) => {
+				return sort.active;
+			}).pop();
+			
+			// run sort function
+			if (sortActive) {
+				cards = utils.values.sort(cards, sortActive.type, sortActive.field, sortActive.direction);
+			}
+		}	
+
 		return cards;
 	},
-	sorts : (utils, sortList) => {
-		let sorts = utils.flatten(sortList);
-
-		// build modified sortList
-		if (sorts.length > 0) {
-			// loop through sorts
-			sorts = sorts.filter((sort) => {
-				sort.active = utils.params.get().includes(`sort=${sort.value}`); // check if active by looking at params
-				return sort;
-			});
-		}
-		
-		return sorts;
-	},	
 	filters : (utils, cards, filterList) => {
 		let filters = utils.flatten(filterList);
 

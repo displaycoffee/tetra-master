@@ -2,7 +2,7 @@
 import { useSearchParams } from 'react-router-dom';
 
 const Filters = (props) => {
-	let { utils, buildSelections, filters } = props;
+	let { utils, buildResponse, filters } = props;
 	let [filterParams, setFilterParams] = useSearchParams();
 
 	function handleValue(e, field, value) {
@@ -16,8 +16,8 @@ const Filters = (props) => {
 			utils.params.add(filterParams, field, value.value, setFilterParams);
 		}
 
-		// run buildSelections function to refresh card list
-		buildSelections();
+		// run buildResponse function to refresh card list
+		buildResponse();
 	}
 
 	return (
