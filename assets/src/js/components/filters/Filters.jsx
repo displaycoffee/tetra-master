@@ -5,18 +5,18 @@ const Filters = (props) => {
 	let { utils, buildResponse, filters } = props;
 	let [filterParams, setFilterParams] = useSearchParams();
 
-	function handleValue(e, field, value) {
+	function handleValue(e, value, active) {
 		e.preventDefault();
 
 		// page paramters should be removed when filters are set
 		filterParams.delete(utils.params.url.page);
 
-		if (value.active) {
+		if (active) {
 			// remove filter parameters from url
-			utils.params.remove(filterParams, field, value.value, setFilterParams);
+			utils.params.remove(filterParams, utils.params.url.filter, value, setFilterParams);
 		} else {
 			// add filter parameters to url
-			utils.params.add(filterParams, field, value.value, setFilterParams);
+			utils.params.add(filterParams, utils.params.url.filter, value, setFilterParams);
 		}
 
 		// run buildResponse function to refresh card list
@@ -42,7 +42,7 @@ const Filters = (props) => {
 													<a
 														className="filter-list-link pointer"
 														onClick={(e) => {
-															handleValue(e, filter.field, value);
+															handleValue(e, value.value, value.active);
 														}}
 													>
 														{value.label} <span className="value-count">({value.count})</span>

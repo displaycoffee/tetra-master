@@ -1,12 +1,13 @@
 export let builds = {
 	selections : (utils, filterList) => {
 		let selections = [];
-		const paramsList = utils.params.list();		
+		const paramsList = utils.params.list();	
 
 		if (paramsList.length > 0) {
 			// configure selections
 			selections = paramsList.map((param, index) => {
-				let paramValues = param.split('=');
+				let paramFilter = param.split('=');				
+				let paramValues = paramFilter[1].split(':');
 				let selectionDetail = false;
 
 				// parameter pairs should contain two items and be in filterList config
@@ -17,9 +18,11 @@ export let builds = {
 					const paramDetail = filterList[paramField] ? filterList[paramField] : false;
 
 					if (paramDetail) {
-						const paramId = `${paramDetail.id}-${indexAdjust}`;
-						selectionDetail = utils.params.config(indexAdjust, paramId, paramField, paramDetail.label);
-						selectionDetail.value = paramValue;
+						const valueId = `${paramDetail.id}-${indexAdjust}`;
+						const valueParameter = `${paramField}:${paramValue}`;
+						selectionDetail = utils.params.config(indexAdjust, valueId, paramField, paramValue);
+						selectionDetail.filterLabel = paramDetail.label;
+						selectionDetail.value = valueParameter;
 					}
 				}
 
@@ -57,11 +60,11 @@ export let builds = {
 				// loop through selections values for each card
 				let cardActive = selections.some((select) => {
 					const valuesList = utils.setArray(card[select.field]);
-
+					
 					// further, we need to check all values in the cards current field
 					// once a match is made, return true
 					return valuesList.some((value) => {
-						return utils.values.compare(value, select.value);
+						return utils.values.compare(`${select.field}:${value}`, select.value);
 					});
 				});
 
@@ -107,13 +110,13 @@ export let builds = {
 							} else {
 								const valueString = String(value);
 								const valueId = `${filter.id}-${utils.handleize(valueString)}`;
-								const valueParameter = `${filter.field}=${valueString.toLowerCase()}`;
+								const valueParameter = `${filter.field}:${valueString}`;
 
 								// otherwise add as new to storage
 								valuesStorage[value] = utils.params.config(0, valueId, filter.field, valueString);
-								valuesStorage[value].value = value;
+								valuesStorage[value].value = valueParameter;
 								valuesStorage[value].count = 1;
-								valuesStorage[value].active = utils.params.get().includes(valueParameter); // check if active by looking at params
+								valuesStorage[value].active = utils.params.get().includes(`${utils.params.url.filter}=${valueParameter}`); // check if active by looking at params
 							}
 						});
 					}

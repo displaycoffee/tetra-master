@@ -10,12 +10,12 @@ const Pagination = (props) => {
 	const pagesStart = pages.current <= pagesSpan ? 0 : ((pages.current - 1) - pagesSpan);
 	const pagesEnd = pages.current + pagesSpan;
 
-	function handleValue(e, field, value) {
+	function handleValue(e, value) {
 		e.preventDefault();
 
 		// remove any page parameter and add new parameter to url
-		pageParams.delete(field);
-		utils.params.add(pageParams, field, value, setPageParams);
+		pageParams.delete(utils.params.url.page);
+		utils.params.add(pageParams, utils.params.url.page, value, setPageParams);
 
 		// run buildPages function to refresh list
 		buildPages();
@@ -30,7 +30,7 @@ const Pagination = (props) => {
 							<a
 								className="page-list-link pointer"
 								onClick={(e) => {
-									handleValue(e, utils.params.url.page, pages.current - 1);
+									handleValue(e, pages.current - 1);
 								}}
 							>
 								Previous
@@ -46,7 +46,7 @@ const Pagination = (props) => {
 								<a
 									className="page-list-link pointer"
 									onClick={(e) => {
-										handleValue(e, utils.params.url.page, page);
+										handleValue(e, page);
 									}}
 								>
 									{page}
@@ -60,7 +60,7 @@ const Pagination = (props) => {
 							<a
 								className="page-list-link pointer"
 								onClick={(e) => {
-									handleValue(e, utils.params.url.page, pages.current + 1);
+									handleValue(e, pages.current + 1);
 								}}
 							>
 								Next
