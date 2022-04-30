@@ -4,7 +4,7 @@ import Pagination from '../toolbar/Pagination';
 import Cards from '../cards/Cards';
 
 const Content = (props) => {
-	let { utils, buildResponse, cards, sorts, filterList } = props;
+	let { utils, buildResponse, sorts, cards, filterList } = props;
 
 	let pagesTotal = Math.ceil(cards.length / 3);
 	let pages = {

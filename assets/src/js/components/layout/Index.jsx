@@ -4,8 +4,8 @@ import { useState, useEffect } from 'react';
 /* local script imports */
 import { utils } from '../../scripts/utils';
 import { builds } from '../../scripts/builds';
-import { cardList } from '../../scripts/cardList';
 import { sortList } from '../../scripts/sortList';
+import { cardList } from '../../scripts/cardList';
 import { filterList } from '../../scripts/filterList';
 
 /*local component imports */
@@ -72,7 +72,7 @@ const Index = () => {
 							<>
 								<Sidebar utils={utils} buildResponse={buildResponse} selections={selections} filters={filters} />
 
-								<Content utils={utils} buildResponse={buildResponse} cards={cards} sorts={sorts} filterList={filterList} />
+								<Content utils={utils} buildResponse={buildResponse} sorts={sorts} cards={cards} filterList={filterList} />
 							</>
 						) : (
 							<NoResults />
