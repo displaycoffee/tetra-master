@@ -5,16 +5,16 @@ const Sort = (props) => {
 	const { utils, buildResponse, sorts } = props;
 	let [sortParams, setSortParams] = useSearchParams();
 
-	function handleValue(e, field, value) {
+	function handleValue(e, value, active) {
 		e.preventDefault();
 
-		if (value.active) {
+		if (active) {
 			// remove sort parameter from url
-			utils.params.remove(sortParams, field, value.value, setSortParams);
+			utils.params.remove(sortParams, utils.params.url.sort, value, setSortParams);
 		} else {
 			// remove any sort parameter and add new parameter to url
-			sortParams.delete(field);
-			utils.params.add(sortParams, field, value.value, setSortParams);
+			sortParams.delete(utils.params.url.sort);
+			utils.params.add(sortParams, utils.params.url.sort, value, setSortParams);
 		}
 
 		// run buildResponse function to refresh card list
@@ -31,7 +31,7 @@ const Sort = (props) => {
 								<a
 									className="sort-list-link pointer"
 									onClick={(e) => {
-										handleValue(e, utils.params.url.sort, sort);
+										handleValue(e, sort.value, sort.active);
 									}}
 								>
 									{sort.label}

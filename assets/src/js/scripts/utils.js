@@ -23,7 +23,7 @@ export let utils = {
 		},
 		get : () => {
 			// get decoded parameters from window location
-			return decodeURIComponent(window.location.search.replace(/^\?/, '').replace(/\+/g, ' ')).toLowerCase();
+			return decodeURIComponent(window.location.search.replace(/^\?/, '').replace(/\+/g, ' '));
 		},
 		list : () => {
 			// return array of parameters
@@ -70,21 +70,11 @@ export let utils = {
 				callback(String(newParams));
 			}
 		},
-		clear : (params, callback) => {
+		clear : (params, field, callback) => {
 			let newParams = new URLSearchParams(String(params));
 
-			// get list of parameter values
-			const removeParams = String(params).split('&').map((remove) => {
-				return remove.split('=')[0];
-			});
-
-			// get unique parameters
-			const getUnique = [...new Set(removeParams)];
-
-			// delete field parameters
-			getUnique.forEach((remove) => {
-				newParams.delete(remove);
-			});
+			// delete field from parameters
+			newParams.delete(field);
 
 			// run callback if defined
 			if (callback) {

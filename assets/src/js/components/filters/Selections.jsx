@@ -5,14 +5,14 @@ const Selections = (props) => {
 	let { utils, buildResponse, selections } = props;
 	let [selectionParams, setSelectionParams] = useSearchParams();
 
-	function handleValue(e, field, value) {
+	function handleValue(e, value) {
 		e.preventDefault();
 
 		// page paramters should be removed when selections are removed
 		selectionParams.delete(utils.params.url.page);
 
 		// remove filter parameters from url
-		utils.params.remove(selectionParams, field, value, setSelectionParams);
+		utils.params.remove(selectionParams, utils.params.url.filter, value, setSelectionParams);
 
 		// run buildResponse function to refresh card list
 		buildResponse();
@@ -22,7 +22,7 @@ const Selections = (props) => {
 		e.preventDefault();
 
 		// clear all parameters from url
-		utils.params.clear(selectionParams, setSelectionParams);
+		utils.params.clear(selectionParams, utils.params.url.filter, setSelectionParams);
 
 		// run buildResponse function to refresh card list
 		buildResponse();
@@ -38,10 +38,10 @@ const Selections = (props) => {
 								<a
 									className="selection-list-link pointer"
 									onClick={(e) => {
-										handleValue(e, select.field, select.value);
+										handleValue(e, select.value);
 									}}
 								>
-									<strong>{select.label}:</strong> {select.value}
+									<strong>{select.filterLabel}:</strong> {select.label}
 								</a>
 							</div>
 						);

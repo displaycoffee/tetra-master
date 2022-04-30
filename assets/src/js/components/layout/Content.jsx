@@ -14,7 +14,7 @@ const Content = (props) => {
 
 	// set staticPages config with properties that don't change
 	const staticPages = {
-		size : 3, // number of cards per row
+		size : 12, // number of cards per row
 		build : (list) => {
 			// build paginated list
 			const pageStart = ((pages.current - 1) * pages.size);
