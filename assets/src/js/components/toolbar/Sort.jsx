@@ -4,7 +4,11 @@ import { useSearchParams } from 'react-router-dom';
 
 const Sort = (props) => {
 	const { utils, buildToolbar, sorts } = props;
+
+	// react variables
 	let [sortParams, setSortParams] = useSearchParams();
+
+	// custom variables
 	let [sortState, setSortState] = useState(false);
 	const sortActive = utils.values.active(sorts).pop();
 

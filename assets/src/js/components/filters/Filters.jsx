@@ -3,6 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 
 const Filters = (props) => {
 	let { utils, buildResponse, filters } = props;
+
+	// react variables
 	let [filterParams, setFilterParams] = useSearchParams();
 
 	function handleValue(e, value, active) {

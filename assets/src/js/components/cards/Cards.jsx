@@ -1,3 +1,6 @@
+/* local component imports */
+import Collected from './Collected';
+
 const Cards = (props) => {
 	let { utils, cards, filterList } = props;
 
@@ -33,14 +36,7 @@ const Cards = (props) => {
 									</p>
 								)}
 
-								<p className="card-details-collected">
-									<strong>Collected:</strong>
-									<span className="icon-wrapper">
-										<svg className="icon icon-heart">
-											<use xlinkHref="#icon-heart"></use>
-										</svg>
-									</span>
-								</p>
+								<Collected card={card} />
 
 								{Object.keys(filterList).map((filter) => {
 									// loop through the filterList to display the remaining details

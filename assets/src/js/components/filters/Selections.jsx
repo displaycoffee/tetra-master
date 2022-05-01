@@ -3,6 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 
 const Selections = (props) => {
 	let { utils, buildResponse, selections } = props;
+
+	// react variables
 	let [selectionParams, setSelectionParams] = useSearchParams();
 
 	function handleValue(e, value) {

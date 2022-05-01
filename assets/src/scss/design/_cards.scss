@@ -36,6 +36,15 @@
 					margin-bottom: 0;
 				}
 			}
+			.card-details-collected {
+				.icon-wrapper {
+					&.is-collected {
+						.icon {
+							fill: theme.$color-04;
+						}
+					}
+				}	
+			}
 		}
 	}
 }

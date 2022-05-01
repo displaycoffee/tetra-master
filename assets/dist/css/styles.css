@@ -495,6 +495,9 @@ body {
 .cards .card .card-details > p:last-child {
   margin-bottom: 0;
 }
+.cards .card .card-details .card-details-collected .icon-wrapper.is-collected .icon {
+  fill: #f1f169;
+}
 
 .filters .filter {
   margin: 0 0 30px 0;

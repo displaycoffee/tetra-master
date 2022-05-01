@@ -4,12 +4,14 @@ import { useState, useEffect } from 'react';
 /* local script imports */
 import { sortList } from '../../scripts/sortList';
 
-/*local component imports */
+/* local component imports */
 import Toolbar from '../toolbar/Toolbar';
 import Cards from '../cards/Cards';
 
 const Content = (props) => {
 	let { utils, builds, cards, filterList } = props;
+
+	// custom variables
 	let [loading, setLoading] = useState(true);
 	let [sorts, setSorts] = useState([]);
 	let [pages, setPages] = useState({});
