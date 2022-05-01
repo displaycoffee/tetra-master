@@ -35,5 +35,14 @@ export const filterList = {
 		direction : 'desc',
 		type : 'boolean',
 		values : []
+	},
+	collected : {
+		order : 5,
+		id : 'collected-5',
+		field : 'collected',
+		label : 'Collected',
+		direction : 'desc',
+		type : 'boolean',
+		values : []
 	}
 };

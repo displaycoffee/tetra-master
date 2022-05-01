@@ -1,5 +1,6 @@
 /* react imports */
 import { useState, useEffect } from 'react';
+import { useCookies } from 'react-cookie';
 
 /* local script imports */
 import { utils } from '../../scripts/utils';
@@ -13,7 +14,11 @@ import Content from './Content';
 import NoResults from './NoResults';
 
 const Index = () => {
+	// react variables
 	let [loading, setLoading] = useState(true);
+	const [cookies] = useCookies(['collected']);
+
+	// custom variables
 	let [selections, setSelections] = useState([]);
 	let [cards, setCards] = useState([]);
 	let [filters, setFilters] = useState([]);
@@ -37,6 +42,15 @@ const Index = () => {
 			// step 02: run builds.cards and setCards to state
 			cards = await builds.cards(utils, selections, cardList);
 			if (cards) {
+				// additionally check if card is collected if cookies.collected is set
+				let collectedCookie = cookies?.collected ? cookies.collected : false;
+				if (collectedCookie) {
+					cards = cards.filter((card) => {
+						card.collected = collectedCookie.includes(card.id);
+						return card;
+					});
+				}
+
 				setCards(cards);
 			}
 
@@ -50,18 +64,6 @@ const Index = () => {
 			setTimeout(() => {
 				setLoading(false);
 			}, 1000);
-		}
-	}
-
-	let indexProps = {};
-	if (!loading) {
-		indexProps = {
-			utils : utils,
-			buildResponse : buildResponse,
-			selections : selections,
-			cards : cards,
-			filters : filters,
-			filterList : filterList
 		}
 	}
 

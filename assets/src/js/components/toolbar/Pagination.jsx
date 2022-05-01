@@ -3,6 +3,8 @@ import { useSearchParams } from 'react-router-dom';
 
 const Pagination = (props) => {
 	let { utils, buildToolbar, pages } = props;
+
+	// react variables
 	let [pageParams, setPageParams] = useSearchParams();
 
 	// variables for limiting the amount of pages

@@ -1,4 +1,4 @@
-/*local component imports */
+/* local component imports */
 import Sort from '../toolbar/Sort';
 import Pagination from '../toolbar/Pagination';
 
