@@ -345,11 +345,11 @@
 
 // For hiding / showing content
 @mixin toggle-content($state, $transition: '') {
-	@if $state == hide {
+	@if $state == collapsed {
 		opacity: 0;
 		visibility: hidden;
 	}
-	@if $state == show {
+	@if $state == expanded {
 		visibility: visible;
 		opacity: 1;
 	}

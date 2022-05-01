@@ -7,7 +7,8 @@ export const sortList = {
 		label : 'Name: A to Z',
 		direction : 'asc',
 		type : 'string',
-		value : 'label:asc'
+		value : 'label:asc',
+		default: false,
 	},
 	labelDesc : {
 		order: 2,
@@ -16,7 +17,8 @@ export const sortList = {
 		label : 'Name: Z to A',
 		direction : 'desc',
 		type : 'string',
-		value : 'label:desc'
+		value : 'label:desc',
+		default: false,
 	},
 	orderAsc : {
 		order: 3,
@@ -25,7 +27,8 @@ export const sortList = {
 		label : 'Order: Low to High',
 		direction : 'asc',
 		type : 'integer',
-		value : 'order:asc'
+		value : 'order:asc',
+		default: true,
 	},
 	orderDesc : {
 		order: 4,
@@ -34,6 +37,7 @@ export const sortList = {
 		label : 'Order: High to Low',
 		direction : 'desc',
 		type : 'integer',
-		value : 'order:desc'
+		value : 'order:desc',
+		default: false,
 	}
 };

@@ -2,19 +2,6 @@
 @use '../helpers/_mixins';
 @use '../theme/_theme';
 
-//// RESETS
-//// --------------------------------------------------------------------------
-
-*,
-*:after,
-*:before {
-	box-sizing: border-box;
-}
-
-.pointer {
-	cursor: pointer;
-}
-
 //// FLEX
 //// --------------------------------------------------------------------------
 
@@ -26,20 +13,15 @@
 	@include mixins.flex-layout(row nowrap);
 }
 
-//// BASE
-//// --------------------------------------------------------------------------
-
-body {
-	background: theme.$color-05;
-	padding: 50px;
+.flex-align-center {
+	@include mixins.flex-parent(align-items, center);
 }
 
-.wrapper {
-	max-width: 1000px;
-	margin: 0 auto;
+.flex-justify-center {
+	@include mixins.flex-parent(justify-content, center);
 }
 
-//// LAYOUT
+//// MAIN LAYOUT
 //// --------------------------------------------------------------------------
 
 .layout {
@@ -54,6 +36,24 @@ body {
 		}
 		.layout-content {
 			@include mixins.flex(1 1 0%);
+		}
+	}
+}
+
+//// LIST
+//// --------------------------------------------------------------------------
+
+.list {
+	.list-item {
+		margin: 0 0 theme.$spacing-x1 0;
+		&:last-child {
+			margin-bottom: 0;
+		}
+		&.is-active {
+			.list-link {
+				color: theme.$color-04;
+				font-weight: theme.$font-weight;
+			}
 		}
 	}
 }

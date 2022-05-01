@@ -37,21 +37,7 @@ export let builds = {
 		
 		return selections;
 	},
-	sorts : (utils, sortList) => {
-		let sorts = utils.flatten(sortList);
-
-		// build modified sortList
-		if (sorts.length > 0) {
-			// loop through sorts
-			sorts = sorts.filter((sort) => {
-				sort.active = utils.params.get().includes(`sort=${sort.value}`); // check if active by looking at params
-				return sort;
-			});
-		}
-		
-		return sorts;
-	},	
-	cards : (utils, selections, sorts, cardList) => {
+	cards : (utils, selections, cardList) => {
 		let cards = utils.flatten(cardList);
 
 		// build modified cardList if selections has values
@@ -71,19 +57,6 @@ export let builds = {
 				return cardActive;
 			});
 		}
-
-		// sort cards as needed
-		if (sorts && utils.params.get().includes(`${utils.params.url.sort}=`)) {
-			// get active sort
-			const sortActive = sorts.filter((sort) => {
-				return sort.active;
-			}).pop();
-			
-			// run sort function
-			if (sortActive) {
-				cards = utils.values.sort(cards, sortActive.type, sortActive.field, sortActive.direction);
-			}
-		}	
 
 		return cards;
 	},
@@ -136,5 +109,51 @@ export let builds = {
 		}
 
 		return filters;
+	},
+	sorts : (utils, sortList) => {
+		let sorts = utils.flatten(sortList);
+		const sortParam = `${utils.params.url.sort}=`;
+		
+		if (sorts.length > 0) {
+			// build modified sortList
+			sorts = sorts.filter((sort) => {
+				// check if active by looking at params and sort.default
+				let sortActive = sort.default;				
+				if (utils.params.get().includes(sortParam)) {
+					sortActive = utils.params.get().includes(`${sortParam}${sort.value}`);
+				}
+				sort.active = sortActive;
+				return sort;
+			});
+		}
+		
+		return sorts;
+	},
+	pages : (utils, size, cards) => {
+		// set up search params for pagination
+		let pageParams = utils.params.get();
+		let newParams = new URLSearchParams(String(pageParams));
+
+		// set pages config
+		let pages = {
+			size : size, // number of cards per row
+			build : (list) => {
+				// build paginated list
+				const pageStart = ((pages.current - 1) * pages.size);
+				const pageEnd = (pageStart + pages.size);			
+				return list.slice(pageStart, pageEnd);
+			}
+		};
+
+		// add to pages config
+		pages.total = Math.ceil(cards.length / pages.size); // total number of pages
+		pages.range = [...(new Array(pages.total))].map((_, i) => i + 1); // array of numbers with all pages
+		if (pageParams.includes(`${utils.params.url.page}=`) && newParams.get(utils.params.url.page)) {
+			pages.current = Number(newParams.get(utils.params.url.page));
+		} else {
+			pages.current = 1;
+		}
+
+		return pages;
 	}
 };

@@ -2,7 +2,7 @@
 import { useSearchParams } from 'react-router-dom';
 
 const Pagination = (props) => {
-	let { utils, buildPages, pages } = props;
+	let { utils, buildToolbar, pages } = props;
 	let [pageParams, setPageParams] = useSearchParams();
 
 	// variables for limiting the amount of pages
@@ -17,18 +17,18 @@ const Pagination = (props) => {
 		pageParams.delete(utils.params.url.page);
 		utils.params.add(pageParams, utils.params.url.page, value, setPageParams);
 
-		// run buildPages function to refresh list
-		buildPages();
+		// run buildToolbar function to refresh list
+		buildToolbar();
 	}
 	
 	return (
 		pages?.range && pages?.range?.length > 1 && (
 			<div className="pages">
-				<div className="page-list">
+				<div className="page-options flex-wrap flex-align-center">
 					{pages.current !== 1 && (
-						<div className={`page-list-option page-list-previous`}>
+						<div className={`page page-previous`}>
 							<a
-								className="page-list-link pointer"
+								className="page-link pointer"
 								onClick={(e) => {
 									handleValue(e, pages.current - 1);
 								}}
@@ -42,9 +42,9 @@ const Pagination = (props) => {
 						const pageActive = (page == pages.current);
 
 						return (
-							<div key={page} className={`page-list-option${pageActive ? ' is-active' : ''}`}>
+							<div key={page} className={`page${pageActive ? ' is-active' : ''}`}>
 								<a
-									className="page-list-link pointer"
+									className="page-link pointer"
 									onClick={(e) => {
 										handleValue(e, page);
 									}}
@@ -56,9 +56,9 @@ const Pagination = (props) => {
 					}).slice(pagesStart, pagesEnd)}
 
 					{pages.current !== pages.range.length && (
-						<div className={`page-list-option page-list-next`}>
+						<div className={`page page-next`}>
 							<a
-								className="page-list-link pointer"
+								className="page-link pointer"
 								onClick={(e) => {
 									handleValue(e, pages.current + 1);
 								}}

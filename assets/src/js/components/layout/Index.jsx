@@ -4,11 +4,10 @@ import { useState, useEffect } from 'react';
 /* local script imports */
 import { utils } from '../../scripts/utils';
 import { builds } from '../../scripts/builds';
-import { sortList } from '../../scripts/sortList';
 import { cardList } from '../../scripts/cardList';
 import { filterList } from '../../scripts/filterList';
 
-/*local component imports */
+/* local component imports */
 import Sidebar from './Sidebar';
 import Content from './Content';
 import NoResults from './NoResults';
@@ -17,7 +16,6 @@ const Index = () => {
 	let [loading, setLoading] = useState(true);
 	let [selections, setSelections] = useState([]);
 	let [cards, setCards] = useState([]);
-	let [sorts, setSorts] = useState([]);
 	let [filters, setFilters] = useState([]);
 
 	useEffect(() => {
@@ -30,25 +28,19 @@ const Index = () => {
 		setLoading(true);
 
 		if (loading) {
-			// step 01: run build.selections and setSelections to state
+			// step 01: run builds.selections and setSelections to state
 			selections = await builds.selections(utils, filterList);
 			if (selections) {
 				setSelections(selections);
 			}
 
-			// step 02: run build.sorts and setSorts to state
-			sorts = await builds.sorts(utils, sortList);
-			if (sorts) {
-				setSorts(sorts);
-			}
-
-			// step 03: run build.cards and setCards to state
-			cards = await builds.cards(utils, selections, sorts, cardList);
+			// step 02: run builds.cards and setCards to state
+			cards = await builds.cards(utils, selections, cardList);
 			if (cards) {
 				setCards(cards);
 			}
 
-			// step 04: run build.filters and setFilters to state
+			// step 03: run builds.filters and setFilters to state
 			filters = await builds.filters(utils, cards, filterList);
 			if (filters) {
 				setFilters(filters);
@@ -58,6 +50,18 @@ const Index = () => {
 			setTimeout(() => {
 				setLoading(false);
 			}, 1000);
+		}
+	}
+
+	let indexProps = {};
+	if (!loading) {
+		indexProps = {
+			utils : utils,
+			buildResponse : buildResponse,
+			selections : selections,
+			cards : cards,
+			filters : filters,
+			filterList : filterList
 		}
 	}
 
@@ -72,7 +76,7 @@ const Index = () => {
 							<>
 								<Sidebar utils={utils} buildResponse={buildResponse} selections={selections} filters={filters} />
 
-								<Content utils={utils} buildResponse={buildResponse} sorts={sorts} cards={cards} filterList={filterList} />
+								<Content utils={utils} builds={builds} cards={cards} filterList={filterList} />
 							</>
 						) : (
 							<NoResults />

@@ -7,12 +7,16 @@
 
 .filters {
 	.filter {
+		margin: 0 0 theme.$spacing-x6 0;
+		&:last-child {
+			margin-bottom: 0;
+		}
 		.filter-header {
 		}
 		.filter-options {
-			.filter-list {
-				.filter-list-option {
-					.filter-list-link {
+			.list {
+				.list-item {
+					.list-link {
 						.value-count {
 							font-size: mixins.em(12px, rem);
 						}

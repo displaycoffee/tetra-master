@@ -1,7 +1,8 @@
-@use 'elements/_normalize';
-@use 'elements/_typography';
-@use 'elements/_icons-svg';
-@use 'elements/_base';
-@use 'elements/_cards';
-@use 'elements/_sorts';
-@use 'elements/_filters';
+@use 'design/_normalize';
+@use 'design/_typography';
+@use 'design/_icons-svg';
+@use 'design/_base';
+@use 'design/_elements';
+@use 'design/_toolbar';
+@use 'design/_cards';
+@use 'design/_filters';

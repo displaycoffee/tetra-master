@@ -31,12 +31,12 @@ const Selections = (props) => {
 	return (
 		selections.length !== 0 && (
 			<div className="selections">
-				<div className="selection-list">
+				<div className="list">
 					{selections.map((select) => {
 						return (
-							<div key={select.id} className="selection-list-option">
+							<div key={select.id} className="list-item">
 								<a
-									className="selection-list-link pointer"
+									className="list-link pointer"
 									onClick={(e) => {
 										handleValue(e, select.value);
 									}}
@@ -47,9 +47,9 @@ const Selections = (props) => {
 						);
 					})}
 
-					<div className="selection-list-option selection-list-clear">
+					<div className="list-item list-clear">
 						<a
-							className="selection-list-link pointer"
+							className="list-link pointer"
 							onClick={(e) => {
 								handleClear(e);
 							}}

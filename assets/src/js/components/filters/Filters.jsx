@@ -35,12 +35,12 @@ const Filters = (props) => {
 								</div>
 
 								<div className="filter-options">
-									<div className="filter-list">
+									<div className="list">
 										{filter.values.map((value) => {
 											return (
-												<div key={value.id} className={`filter-list-option${value.active ? ' is-active' : ''}`}>
+												<div key={value.id} className={`list-item${value.active ? ' is-active' : ''}`}>
 													<a
-														className="filter-list-link pointer"
+														className="list-link pointer"
 														onClick={(e) => {
 															handleValue(e, value.value, value.active);
 														}}

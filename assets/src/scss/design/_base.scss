@@ -1,0 +1,29 @@
+// Use helpers and theme variables
+@use '../helpers/_mixins';
+@use '../theme/_theme';
+
+//// RESETS
+//// --------------------------------------------------------------------------
+
+*,
+*:after,
+*:before {
+	box-sizing: border-box;
+}
+
+.pointer {
+	cursor: pointer;
+}
+
+//// BASE
+//// --------------------------------------------------------------------------
+
+body {
+	background: theme.$color-05;
+	padding: 50px;
+}
+
+.wrapper {
+	max-width: 1000px;
+	margin: 0 auto;
+}

@@ -1,0 +1,64 @@
+// Use helpers and theme variables
+@use '../helpers/_mixins';
+@use '../theme/_theme';
+
+//// TOOLBAR
+//// --------------------------------------------------------------------------
+
+.toolbar {
+	&.toolbar-top {
+		margin: 0 0 theme.$spacing-x4 0;
+		.toolbar-row {
+			.toolbar-pages {
+				margin-left: auto;
+			}
+		}
+	}
+	&.toolbar-bottom {
+		margin: theme.$spacing-x4 0 0 0;
+	}
+	.toolbar-row {
+		.toolbar-column {}
+	}
+}
+
+//// SORT
+//// --------------------------------------------------------------------------
+
+.sorts {
+	position: relative;
+	.sort-label {
+
+	}
+	.sort-options {
+		@include mixins.position($type: absolute, $top: -9999px, $left: -9999px, $z: -1);
+		@include mixins.toggle-content(collapsed, true);
+		background: gray;
+		margin: theme.$spacing-x2 0 0 0;
+		padding: theme.$spacing-x2;
+		&.is-expanded {
+			top: auto;
+			left: 0;
+			z-index: 1;
+			@include mixins.toggle-content(expanded, false);
+		}
+	}
+}
+
+//// PAGINATION
+//// --------------------------------------------------------------------------
+
+.pages {
+	.page-options {
+		margin: 0 -#{theme.$spacing-x2};
+		.page {
+			padding: 0 theme.$spacing-x2;
+			&.is-active {
+				.page-link {
+					color: theme.$color-04;
+					font-weight: theme.$font-weight;
+				}
+			}
+		}
+	}
+}

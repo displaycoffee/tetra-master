@@ -84,6 +84,12 @@ export let utils = {
 	},
 	values: {
 		// functions for manipulating values
+		active : (list) => {
+			// find active values in list
+			return list.filter((item) => {
+				return item.active;
+			});			
+		},
 		check : (value) => {
 			// check if value is defined, even if value is boolean
 			return String(value) && value != undefined;
