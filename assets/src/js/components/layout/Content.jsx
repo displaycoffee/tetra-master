@@ -16,6 +16,7 @@ const Content = (props) => {
 	let [sorts, setSorts] = useState([]);
 	let [pages, setPages] = useState({});
 	let [paginated, setPaginated] = useState([]);
+	const pageSize = 12;
 
 	useEffect(() => {
 		buildToolbar();
@@ -40,7 +41,7 @@ const Content = (props) => {
 			}
 
 			// step 02: run builds.pages and setPages to state
-			pages = await builds.pages(utils, 12, cards);
+			pages = await builds.pages(utils, pageSize, cards);
 			if (pages) {
 				setPages(pages);
 
@@ -66,7 +67,7 @@ const Content = (props) => {
 
 			<Toolbar utils={utils} buildToolbar={buildToolbar} sorts={sorts} pages={pages} location={'top'} />			
 
-			<Cards utils={utils} cards={paginated} filterList={filterList} />
+			<Cards utils={utils} pageSize={pageSize} cards={paginated} filterList={filterList} />
 
 			<Toolbar utils={utils} buildToolbar={buildToolbar} sorts={sorts} pages={pages} location={'bottom'} />
 		</section>

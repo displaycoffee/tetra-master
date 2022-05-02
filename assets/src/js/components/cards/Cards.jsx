@@ -1,8 +1,28 @@
+/* react imports */
+import { useState, useEffect } from 'react';
+
 /* local component imports */
 import Collected from './Collected';
+import QuickView from './QuickView';
 
 const Cards = (props) => {
-	let { utils, cards, filterList } = props;
+	let { utils, pageSize, cards, filterList } = props;
+
+	// react variables
+	let [quickViewCard, setQuickViewCard] = useState(false);
+
+	function toggleQuickView(e, card, index) {
+		e.preventDefault();
+
+		// reset card-quick-view
+		setQuickViewCard(false);
+
+		setTimeout(() => {
+			quickViewCard = card;
+			quickViewCard.index = index;
+			setQuickViewCard(quickViewCard);
+		}, 1000);
+	}
 
 	// set default and on error image
 	const defaulImage = '/assets/dist/images/cactaur.png';
@@ -13,7 +33,7 @@ const Cards = (props) => {
 	return (
 		cards.length !== 0 && (
 			<div className="cards flex-wrap">
-				{cards.map((card) => {
+				{cards.map((card, index) => {
 					// Check for if image is set
 					let displayImage = card.image ? card.image : defaultImage;
 
@@ -38,6 +58,10 @@ const Cards = (props) => {
 
 								<Collected card={card} />
 
+								<button className="card-quick-view-button pointer" type="button" onClick={(e) => toggleQuickView(e, card, index)}>
+									Toggle QuickView
+								</button>
+
 								{Object.keys(filterList).map((filter) => {
 									// loop through the filterList to display the remaining details
 									const filterDetail = filterList[filter];
@@ -55,6 +79,8 @@ const Cards = (props) => {
 						</article>
 					);
 				})}
+
+				<QuickView pageSize={pageSize} card={quickViewCard} />
 			</div>
 		)
 	);

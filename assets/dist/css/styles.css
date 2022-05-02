@@ -499,6 +499,11 @@ body {
   fill: #f1f169;
 }
 
+.card-quick-view {
+  border: 1px solid #ff00ff;
+  flex: 1 1 100%;
+}
+
 .filters .filter {
   margin: 0 0 30px 0;
 }
