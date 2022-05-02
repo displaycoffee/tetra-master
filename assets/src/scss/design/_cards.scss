@@ -9,6 +9,7 @@
 	margin: 0 -#{theme.$spacing-x2};
 	.card {
 		@include mixins.flex-parent(align-items, flex-start);
+		order: 0;
 		width: 33.3333%;
 		padding: 0 theme.$spacing-x2;
 		margin: 0 0 theme.$spacing-x4 0;
@@ -55,4 +56,31 @@
 .card-quick-view {
 	border: 1px solid #ff00ff;
 	flex: 1 1 100%;
+	&.card-quick-view-row-md-1 {
+		order: 1;
+	}
+	&.card-quick-view-row-md-2 {
+		order: 2;
+	}
+	&.card-quick-view-row-md-3 {
+		order: 3;
+	}
+	&.card-quick-view-row-md-4 {
+		order: 4;
+	}
+}
+
+.card:nth-child(n+4):nth-child(-n+6) {
+	border: 1px solid red;
+	order: 2;
+}
+
+.card:nth-child(n+7):nth-child(-n+9) {
+	border: 1px solid orange;
+	order: 3;
+}
+
+.card:nth-child(n+10):nth-child(-n+12) {
+	border: 1px solid green;
+	order: 4;
 }

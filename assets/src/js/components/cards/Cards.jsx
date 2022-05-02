@@ -31,58 +31,56 @@ const Cards = (props) => {
 	};
 
 	return (
-		cards.length !== 0 && (
-			<div className="cards flex-wrap">
-				{cards.map((card, index) => {
-					// Check for if image is set
-					let displayImage = card.image ? card.image : defaultImage;
+		<div className="cards flex-wrap">
+			{cards.map((card, index) => {
+				// Check for if image is set
+				let displayImage = card.image ? card.image : defaultImage;
 
-					return (
-						<article key={card.id} id={card.id} className="card card-block flex-nowrap">
-							<div className="card-image">
-								<img src={displayImage} onError={imageError} loading="lazy" />
-							</div>
+				return (
+					<article key={card.id} id={card.id} className="card card-block flex-nowrap">
+						<div className="card-image">
+							<img src={displayImage} onError={imageError} loading="lazy" />
+						</div>
 
-							<div className="card-details">
-								{card.label && (
-									<p className="card-details-name">
-										<strong>Name:</strong> {card.label}
-									</p>
-								)}
+						<div className="card-details">
+							{card.label && (
+								<p className="card-details-name">
+									<strong>Name:</strong> {card.label}
+								</p>
+							)}
 
-								{card.stats && (
-									<p className="card-details-stats">
-										<strong>Stats:</strong> {card.stats}
-									</p>
-								)}
+							{card.stats && (
+								<p className="card-details-stats">
+									<strong>Stats:</strong> {card.stats}
+								</p>
+							)}
 
-								<Collected card={card} />
+							<Collected card={card} />
 
-								<button className="card-quick-view-button pointer" type="button" onClick={(e) => toggleQuickView(e, card, index)}>
-									Toggle QuickView
-								</button>
+							<button className="card-quick-view-button pointer" type="button" onClick={(e) => toggleQuickView(e, card, index)}>
+								Toggle QuickView
+							</button>
 
-								{Object.keys(filterList).map((filter) => {
-									// loop through the filterList to display the remaining details
-									const filterDetail = filterList[filter];
-									const cardValue = card[filter];
+							{Object.keys(filterList).map((filter) => {
+								// loop through the filterList to display the remaining details
+								const filterDetail = filterList[filter];
+								const cardValue = card[filter];
 
-									return (
-										utils.values.check(cardValue) && (
-											<p key={filterDetail.id} className={`card-details-${filterDetail.field}`}>
-												<strong>{filterDetail.label}:</strong> {String(cardValue)}
-											</p>
-										)
-									);
-								})}
-							</div>
-						</article>
-					);
-				})}
+								return (
+									utils.values.check(cardValue) && (
+										<p key={filterDetail.id} className={`card-details-${filterDetail.field}`}>
+											<strong>{filterDetail.label}:</strong> {String(cardValue)}
+										</p>
+									)
+								);
+							})}
+						</div>
+					</article>
+				);
+			})}
 
-				<QuickView pageSize={pageSize} card={quickViewCard} />
-			</div>
-		)
+			<QuickView pageSize={pageSize} card={quickViewCard} />
+		</div>
 	);
 };
 
