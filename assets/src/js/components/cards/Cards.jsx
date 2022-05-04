@@ -1,8 +1,40 @@
+/* react imports */
+import { useState } from 'react';
+
 /* local component imports */
 import Collected from './Collected';
+import QuickView from './QuickView';
 
 const Cards = (props) => {
-	let { utils, cards, filterList } = props;
+	let { utils, theme, cards } = props;
+
+	// react variables
+	let [quickViewCard, setQuickViewCard] = useState(false);
+
+	function toggleQuickView(e, card, index) {
+		e.preventDefault();
+		
+		if (quickViewCard?.id == card.id) {
+			// if quickViewCard is set and matches incoming card id, close quick view
+			setQuickViewCard(false);
+		} else {
+			// reset card quick view
+			setQuickViewCard(false);
+
+			setTimeout(() => {
+				quickViewCard = card;
+				quickViewCard.index = index;
+				setQuickViewCard(quickViewCard);
+			}, 500);
+		}
+	}
+
+	// if quick view is expanded and elements are clicked outside, close quick view
+	if (quickViewCard) {
+		document.querySelector('body').onclick = () => {
+			setQuickViewCard(false);
+		};
+	}
 
 	// set default and on error image
 	const defaulImage = '/assets/dist/images/cactaur.png';
@@ -11,52 +43,42 @@ const Cards = (props) => {
 	};
 
 	return (
-		cards.length !== 0 && (
-			<div className="cards flex-wrap">
-				{cards.map((card) => {
-					// Check for if image is set
-					let displayImage = card.image ? card.image : defaultImage;
+		<div className="cards flex-wrap">
+			{cards.map((card, index) => {
+				// Check for if image is set
+				let displayImage = card.image ? card.image : defaultImage;
 
-					return (
-						<article key={card.id} id={card.id} className="card card-block flex-nowrap">
-							<div className="card-image">
-								<img src={displayImage} onError={imageError} loading="lazy" />
-							</div>
+				return (
+					<article key={card.id} id={card.id} className="card card-block flex-nowrap">
+						<div className="card-image">
+							<img src={displayImage} onError={imageError} loading="lazy" />
+						</div>
 
-							<div className="card-details">
-								{card.label && (
-									<p className="card-details-name">
-										<strong>Name:</strong> {card.label}
-									</p>
-								)}
+						<div className="card-details">
+							{card.label && (
+								<p className="card-details-name">
+									<strong>Name:</strong> {card.label}
+								</p>
+							)}
 
-								{card.stats && (
-									<p className="card-details-stats">
-										<strong>Stats:</strong> {card.stats}
-									</p>
-								)}
+							{card.stats && (
+								<p className="card-details-stats">
+									<strong>Stats:</strong> {card.stats}
+								</p>
+							)}
 
-								<Collected card={card} />
+							<Collected card={card} />
 
-								{Object.keys(filterList).map((filter) => {
-									// loop through the filterList to display the remaining details
-									const filterDetail = filterList[filter];
-									const cardValue = card[filter];
+							<button className="quick-view-button pointer" type="button" onClick={(e) => toggleQuickView(e, card, index)}>
+								Toggle QuickView
+							</button>
+						</div>
+					</article>
+				);
+			})}
 
-									return (
-										utils.values.check(cardValue) && (
-											<p key={filterDetail.id} className={`card-details-${filterDetail.field}`}>
-												<strong>{filterDetail.label}:</strong> {String(cardValue)}
-											</p>
-										)
-									);
-								})}
-							</div>
-						</article>
-					);
-				})}
-			</div>
-		)
+			<QuickView utils={utils} theme={theme} card={quickViewCard} />
+		</div>
 	);
 };
 

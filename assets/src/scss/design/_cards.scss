@@ -9,11 +9,11 @@
 	margin: 0 -#{theme.$spacing-x2};
 	.card {
 		@include mixins.flex-parent(align-items, flex-start);
-		width: 33.3333%;
 		padding: 0 theme.$spacing-x2;
-		margin: 0 0 theme.$spacing-x4 0;
-		&,
-		.card-image, .card-details {
+		margin: 0 0 theme.$spacing-x4 0;		
+		width: calc(100% / theme.$per-row-sm);
+		@include mixins.card-order(theme.$page-size, theme.$per-row-sm);
+		&, .card-image, .card-details {
 			@include mixins.flex(0 1 auto);
 		}
 		.card-image {
@@ -46,5 +46,47 @@
 				}	
 			}
 		}
+	}
+}
+
+@include mixins.respond-min(theme.$bp-02) {
+	.cards {
+		.card {
+			width: calc(100% / theme.$per-row-md);
+			@include mixins.card-order(theme.$page-size, theme.$per-row-md);
+		}
+	}
+}
+
+@include mixins.respond-min(theme.$bp-03) {
+	.cards {
+		.card {
+			width: calc(100% / theme.$per-row-lg);
+			@include mixins.card-order(theme.$page-size, theme.$per-row-lg);
+		}
+	}
+}
+
+//// QUICK VIEW
+//// --------------------------------------------------------------------------
+
+.quick-view {
+	flex: 1 1 100%;
+	@include mixins.quick-view-order(theme.$page-size, theme.$per-row-sm, theme.$quick-view-sm);
+	@include mixins.toggle-content(collapsed, true);
+	&.is-expanded {
+		@include mixins.toggle-content(expanded, true);
+	}
+}
+
+@include mixins.respond-min(theme.$bp-02) {
+	.quick-view {
+		@include mixins.quick-view-order(theme.$page-size, theme.$per-row-md, theme.$quick-view-md);
+	}
+}
+
+@include mixins.respond-min(theme.$bp-03) {
+	.quick-view {
+		@include mixins.quick-view-order(theme.$page-size, theme.$per-row-lg, theme.$quick-view-lg);
 	}
 }

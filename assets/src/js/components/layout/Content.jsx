@@ -9,14 +9,14 @@ import Toolbar from '../toolbar/Toolbar';
 import Cards from '../cards/Cards';
 
 const Content = (props) => {
-	let { utils, builds, cards, filterList } = props;
+	let { utils, builds, theme, cards } = props;
 
 	// custom variables
 	let [loading, setLoading] = useState(true);
 	let [sorts, setSorts] = useState([]);
 	let [pages, setPages] = useState({});
 	let [paginated, setPaginated] = useState([]);
-
+	
 	useEffect(() => {
 		buildToolbar();
 	}, []); // eslint-disable-line react-hooks/exhaustive-deps
@@ -40,7 +40,7 @@ const Content = (props) => {
 			}
 
 			// step 02: run builds.pages and setPages to state
-			pages = await builds.pages(utils, 12, cards);
+			pages = await builds.pages(utils, theme.cards.pageSize, cards);
 			if (pages) {
 				setPages(pages);
 
@@ -66,7 +66,7 @@ const Content = (props) => {
 
 			<Toolbar utils={utils} buildToolbar={buildToolbar} sorts={sorts} pages={pages} location={'top'} />			
 
-			<Cards utils={utils} cards={paginated} filterList={filterList} />
+			<Cards utils={utils} theme={theme} cards={paginated} />
 
 			<Toolbar utils={utils} buildToolbar={buildToolbar} sorts={sorts} pages={pages} location={'bottom'} />
 		</section>
