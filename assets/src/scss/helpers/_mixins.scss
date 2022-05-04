@@ -383,3 +383,27 @@
 @function unicode($str) {
     @return unquote("\"") + unquote(str-insert($str, "\\", 1)) + unquote("\"");
 }
+
+// Custom mixins for site
+
+// Determine order rule for cards
+@mixin card-order($page-size, $per-row) {
+	$quick-view-row: calc($page-size / $per-row);
+	@for $i from 1 through $quick-view-row {
+		$low-number: ($i * $per-row) - $per-row + 1;
+		$high-number: $i * $per-row;
+		&:nth-child(n+#{$low-number}):nth-child(-n+#{$high-number}) {
+			order: $i;
+		}
+	}
+}
+
+// Determine order rule for quick-view
+@mixin quick-view-order($page-size, $per-row, $class) {
+	$quick-view-row: calc($page-size / $per-row);
+	@for $i from 1 through $quick-view-row {
+		&#{$class}-#{$i} {
+			order: $i;
+		}
+	}
+}

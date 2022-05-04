@@ -1,27 +1,39 @@
 /* react imports */
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 /* local component imports */
 import Collected from './Collected';
 import QuickView from './QuickView';
 
 const Cards = (props) => {
-	let { utils, pageSize, cards, filterList } = props;
+	let { utils, theme, cards } = props;
 
 	// react variables
 	let [quickViewCard, setQuickViewCard] = useState(false);
 
 	function toggleQuickView(e, card, index) {
 		e.preventDefault();
+		
+		if (quickViewCard?.id == card.id) {
+			// if quickViewCard is set and matches incoming card id, close quick view
+			setQuickViewCard(false);
+		} else {
+			// reset card quick view
+			setQuickViewCard(false);
 
-		// reset card-quick-view
-		setQuickViewCard(false);
+			setTimeout(() => {
+				quickViewCard = card;
+				quickViewCard.index = index;
+				setQuickViewCard(quickViewCard);
+			}, 500);
+		}
+	}
 
-		setTimeout(() => {
-			quickViewCard = card;
-			quickViewCard.index = index;
-			setQuickViewCard(quickViewCard);
-		}, 1000);
+	// if quick view is expanded and elements are clicked outside, close quick view
+	if (quickViewCard) {
+		document.querySelector('body').onclick = () => {
+			setQuickViewCard(false);
+		};
 	}
 
 	// set default and on error image
@@ -57,29 +69,15 @@ const Cards = (props) => {
 
 							<Collected card={card} />
 
-							<button className="card-quick-view-button pointer" type="button" onClick={(e) => toggleQuickView(e, card, index)}>
+							<button className="quick-view-button pointer" type="button" onClick={(e) => toggleQuickView(e, card, index)}>
 								Toggle QuickView
 							</button>
-
-							{Object.keys(filterList).map((filter) => {
-								// loop through the filterList to display the remaining details
-								const filterDetail = filterList[filter];
-								const cardValue = card[filter];
-
-								return (
-									utils.values.check(cardValue) && (
-										<p key={filterDetail.id} className={`card-details-${filterDetail.field}`}>
-											<strong>{filterDetail.label}:</strong> {String(cardValue)}
-										</p>
-									)
-								);
-							})}
 						</div>
 					</article>
 				);
 			})}
 
-			<QuickView pageSize={pageSize} card={quickViewCard} />
+			<QuickView utils={utils} theme={theme} card={quickViewCard} />
 		</div>
 	);
 };

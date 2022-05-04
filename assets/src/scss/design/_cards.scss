@@ -9,12 +9,11 @@
 	margin: 0 -#{theme.$spacing-x2};
 	.card {
 		@include mixins.flex-parent(align-items, flex-start);
-		order: 0;
-		width: 33.3333%;
 		padding: 0 theme.$spacing-x2;
-		margin: 0 0 theme.$spacing-x4 0;
-		&,
-		.card-image, .card-details {
+		margin: 0 0 theme.$spacing-x4 0;		
+		width: calc(100% / theme.$per-row-sm);
+		@include mixins.card-order(theme.$page-size, theme.$per-row-sm);
+		&, .card-image, .card-details {
 			@include mixins.flex(0 1 auto);
 		}
 		.card-image {
@@ -50,37 +49,44 @@
 	}
 }
 
-//// CARD QUICK VIEW
+@include mixins.respond-min(theme.$bp-02) {
+	.cards {
+		.card {
+			width: calc(100% / theme.$per-row-md);
+			@include mixins.card-order(theme.$page-size, theme.$per-row-md);
+		}
+	}
+}
+
+@include mixins.respond-min(theme.$bp-03) {
+	.cards {
+		.card {
+			width: calc(100% / theme.$per-row-lg);
+			@include mixins.card-order(theme.$page-size, theme.$per-row-lg);
+		}
+	}
+}
+
+//// QUICK VIEW
 //// --------------------------------------------------------------------------
 
-.card-quick-view {
-	border: 1px solid #ff00ff;
+.quick-view {
 	flex: 1 1 100%;
-	&.card-quick-view-row-md-1 {
-		order: 1;
-	}
-	&.card-quick-view-row-md-2 {
-		order: 2;
-	}
-	&.card-quick-view-row-md-3 {
-		order: 3;
-	}
-	&.card-quick-view-row-md-4 {
-		order: 4;
+	@include mixins.quick-view-order(theme.$page-size, theme.$per-row-sm, theme.$quick-view-sm);
+	@include mixins.toggle-content(collapsed, true);
+	&.is-expanded {
+		@include mixins.toggle-content(expanded, true);
 	}
 }
 
-.card:nth-child(n+4):nth-child(-n+6) {
-	border: 1px solid red;
-	order: 2;
+@include mixins.respond-min(theme.$bp-02) {
+	.quick-view {
+		@include mixins.quick-view-order(theme.$page-size, theme.$per-row-md, theme.$quick-view-md);
+	}
 }
 
-.card:nth-child(n+7):nth-child(-n+9) {
-	border: 1px solid orange;
-	order: 3;
-}
-
-.card:nth-child(n+10):nth-child(-n+12) {
-	border: 1px solid green;
-	order: 4;
+@include mixins.respond-min(theme.$bp-03) {
+	.quick-view {
+		@include mixins.quick-view-order(theme.$page-size, theme.$per-row-lg, theme.$quick-view-lg);
+	}
 }

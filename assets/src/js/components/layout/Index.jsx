@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 
 /* local script imports */
+import { theme } from '../../scripts/theme';
 import { utils } from '../../scripts/utils';
 import { builds } from '../../scripts/builds';
 import { cardList } from '../../scripts/cardList';
@@ -78,7 +79,7 @@ const Index = () => {
 							<>
 								<Sidebar utils={utils} buildResponse={buildResponse} selections={selections} filters={filters} />
 
-								<Content utils={utils} builds={builds} cards={cards} filterList={filterList} />
+								<Content utils={utils} builds={builds} theme={theme} cards={cards} />
 							</>
 						) : (
 							<NoResults />

@@ -1,3 +1,7 @@
+/*!******************************************************************************************************************************************************************!*\
+  !*** css ../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!../node_modules/sass-loader/dist/cjs.js!./assets/src/scss/modules/theme.module.scss ***!
+  \******************************************************************************************************************************************************************/
+
 /*!****************************************************************************************************************************************************!*\
   !*** css ../node_modules/css-loader/dist/cjs.js??ruleSet[1].rules[1].use[1]!../node_modules/sass-loader/dist/cjs.js!./assets/src/scss/styles.scss ***!
   \****************************************************************************************************************************************************/
@@ -464,13 +468,29 @@ body {
   -ms-flex-align: start;
   -ms-grid-row-align: flex-start;
   align-items: flex-start;
-  order: 0;
-  width: 33.3333%;
   padding: 0 10px;
   margin: 0 0 20px 0;
+  width: 50%;
 }
-.cards .card,
-.cards .card .card-image, .cards .card .card-details {
+.cards .card:nth-child(n+1):nth-child(-n+2) {
+  order: 1;
+}
+.cards .card:nth-child(n+3):nth-child(-n+4) {
+  order: 2;
+}
+.cards .card:nth-child(n+5):nth-child(-n+6) {
+  order: 3;
+}
+.cards .card:nth-child(n+7):nth-child(-n+8) {
+  order: 4;
+}
+.cards .card:nth-child(n+9):nth-child(-n+10) {
+  order: 5;
+}
+.cards .card:nth-child(n+11):nth-child(-n+12) {
+  order: 6;
+}
+.cards .card, .cards .card .card-image, .cards .card .card-details {
   -webkit-box-flex: 0;
   -webkit-flex: 0 1 auto;
   -ms-flex: 0 1 auto;
@@ -500,38 +520,100 @@ body {
   fill: #f1f169;
 }
 
-.card-quick-view {
-  border: 1px solid #ff00ff;
-  flex: 1 1 100%;
+@media only screen and (min-width: 768px) {
+  .cards .card {
+    width: 33.3333333333%;
+  }
+  .cards .card:nth-child(n+1):nth-child(-n+3) {
+    order: 1;
+  }
+  .cards .card:nth-child(n+4):nth-child(-n+6) {
+    order: 2;
+  }
+  .cards .card:nth-child(n+7):nth-child(-n+9) {
+    order: 3;
+  }
+  .cards .card:nth-child(n+10):nth-child(-n+12) {
+    order: 4;
+  }
 }
-.card-quick-view.card-quick-view-row-md-1 {
+@media only screen and (min-width: 992px) {
+  .cards .card {
+    width: 25%;
+  }
+  .cards .card:nth-child(n+1):nth-child(-n+4) {
+    order: 1;
+  }
+  .cards .card:nth-child(n+5):nth-child(-n+8) {
+    order: 2;
+  }
+  .cards .card:nth-child(n+9):nth-child(-n+12) {
+    order: 3;
+  }
+}
+.quick-view {
+  flex: 1 1 100%;
+  opacity: 0;
+  visibility: hidden;
+  -webkit-transition: opacity 0.5s ease;
+  -moz-transition: opacity 0.5s ease;
+  -ms-transition: opacity 0.5s ease;
+  -o-transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease;
+}
+.quick-view.quick-view-sm-1 {
   order: 1;
 }
-.card-quick-view.card-quick-view-row-md-2 {
+.quick-view.quick-view-sm-2 {
   order: 2;
 }
-.card-quick-view.card-quick-view-row-md-3 {
+.quick-view.quick-view-sm-3 {
   order: 3;
 }
-.card-quick-view.card-quick-view-row-md-4 {
+.quick-view.quick-view-sm-4 {
   order: 4;
 }
-
-.card:nth-child(n+4):nth-child(-n+6) {
-  border: 1px solid red;
-  order: 2;
+.quick-view.quick-view-sm-5 {
+  order: 5;
+}
+.quick-view.quick-view-sm-6 {
+  order: 6;
+}
+.quick-view.is-expanded {
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition: opacity 0.5s ease;
+  -moz-transition: opacity 0.5s ease;
+  -ms-transition: opacity 0.5s ease;
+  -o-transition: opacity 0.5s ease;
+  transition: opacity 0.5s ease;
 }
 
-.card:nth-child(n+7):nth-child(-n+9) {
-  border: 1px solid orange;
-  order: 3;
+@media only screen and (min-width: 768px) {
+  .quick-view.quick-view-md-1 {
+    order: 1;
+  }
+  .quick-view.quick-view-md-2 {
+    order: 2;
+  }
+  .quick-view.quick-view-md-3 {
+    order: 3;
+  }
+  .quick-view.quick-view-md-4 {
+    order: 4;
+  }
 }
-
-.card:nth-child(n+10):nth-child(-n+12) {
-  border: 1px solid green;
-  order: 4;
+@media only screen and (min-width: 992px) {
+  .quick-view.quick-view-lg-1 {
+    order: 1;
+  }
+  .quick-view.quick-view-lg-2 {
+    order: 2;
+  }
+  .quick-view.quick-view-lg-3 {
+    order: 3;
+  }
 }
-
 .filters .filter {
   margin: 0 0 30px 0;
 }

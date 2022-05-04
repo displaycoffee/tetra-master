@@ -1,20 +1,39 @@
 const QuickView = (props) => {
-	let { pageSize, card } = props;
+	let { utils, theme, card } = props;
+	let { perRowSm, perRowMd, perRowLg } = theme.cards;
+	let { quickViewSm, quickViewMd, quickViewLg } = theme.quickView;
 
-	// set card order class
-	let rowClass = '';
-	if (card?.index) {
-		const rowPrefix = 'card-quick-view-row-';
-		const rowMobile = `${rowPrefix}${Math.floor(card.index / 2) + 1}`;
-		const rowTablet = `${rowPrefix}md-${Math.floor(card.index / 3) + 1}`;		
-		const rowDesktop = `${rowPrefix}lg-${Math.floor(card.index / 4) + 1}`;
-		rowClass = ` ${rowMobile} ${rowTablet} ${rowDesktop}`;
+	// set default quickViewClass
+	let quickViewClass = '';
+	if (card?.index >= 0) {
+		quickViewClass = ` ${generatePerRow(perRowSm, quickViewSm)} ${generatePerRow(perRowMd, quickViewMd)} ${generatePerRow(perRowLg, quickViewLg)}`;
+
+		// function to generate responsive order class for quick view
+		function generatePerRow(perRow, quickView) {
+			return `${quickView.replace(/^\./, '')}-${Math.floor(card.index / perRow) + 1}`;
+		}
 	}
 
 	return (
-		<div className={`card-quick-view${rowClass} ${card ? 'is-expanded' : 'is-collapsed'}`}>
+		<div className={`quick-view${quickViewClass} ${card ? 'is-expanded' : 'is-collapsed'}`} onClick={(e) => e.stopPropagation()}>
 			{card && (				
-				<p>{card.label}</p>
+				<div className="quick-view-details">
+					{utils.values.check(card.dropped) && (
+						<p>{String(card.dropped)}</p>
+					)}
+
+					{utils.values.check(card.won) && (
+						<p>{String(card.won)}</p>
+					)}
+
+					{utils.values.check(card.found) && (
+						<p>{String(card.found)}</p>
+					)}
+
+					{utils.values.check(card.missable) && (
+						<p>{String(card.missable)}</p>
+					)}
+				</div>
 			)}
 		</div>
 	);
