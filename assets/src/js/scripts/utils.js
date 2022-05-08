@@ -104,7 +104,7 @@ export let utils = {
 				let sortValueA = a[field];
 				let sortValueB = b[field];
 
-				if (type == 'string') {
+				if (type == 'string' || type == 'boolean') {
 					// make sure booleans are strings
 					sortValueA = String(sortValueA);
 					sortValueB = String(sortValueB);

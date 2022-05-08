@@ -41,17 +41,8 @@ const Index = () => {
 			}
 
 			// step 02: run builds.cards and setCards to state
-			cards = await builds.cards(utils, selections, cardList);
+			cards = await builds.cards(utils, selections, cardList, cookies);
 			if (cards) {
-				// additionally check if card is collected if cookies.collected is set
-				let collectedCookie = cookies?.collected ? cookies.collected : false;
-				if (collectedCookie) {
-					cards = cards.filter((card) => {
-						card.collected = collectedCookie.includes(card.id);
-						return card;
-					});
-				}
-
 				setCards(cards);
 			}
 
@@ -79,7 +70,7 @@ const Index = () => {
 							<>
 								<Sidebar utils={utils} buildResponse={buildResponse} selections={selections} filters={filters} />
 
-								<Content utils={utils} builds={builds} theme={theme} cards={cards} />
+								<Content utils={utils} builds={builds} theme={theme} cards={cards} filters={filters} />
 							</>
 						) : (
 							<NoResults />

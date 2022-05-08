@@ -9,7 +9,7 @@ import Toolbar from '../toolbar/Toolbar';
 import Cards from '../cards/Cards';
 
 const Content = (props) => {
-	let { utils, builds, theme, cards } = props;
+	let { utils, builds, theme, cards, filters } = props;
 
 	// custom variables
 	let [loading, setLoading] = useState(true);
@@ -66,7 +66,7 @@ const Content = (props) => {
 
 			<Toolbar utils={utils} buildToolbar={buildToolbar} sort={sort} pages={pages} location={'top'} />			
 
-			<Cards utils={utils} theme={theme} cards={paginated} />
+			<Cards utils={utils} theme={theme} cards={paginated} filters={filters} />
 
 			<Toolbar utils={utils} buildToolbar={buildToolbar} sort={sort} pages={pages} location={'bottom'} />
 		</section>

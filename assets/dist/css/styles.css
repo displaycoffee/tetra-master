@@ -530,6 +530,13 @@ body {
 .cards .card .card-details .card-details-collected .icon-wrapper.is-collected .icon {
   fill: #f1f169;
 }
+.cards .card .card-details .card-details-collected .icon-wrapper .icon {
+  -webkit-transition: fill 0.5s ease-in-out;
+  -moz-transition: fill 0.5s ease-in-out;
+  -ms-transition: fill 0.5s ease-in-out;
+  -o-transition: fill 0.5s ease-in-out;
+  transition: fill 0.5s ease-in-out;
+}
 
 @media only screen and (min-width: 768px) {
   .cards .card {

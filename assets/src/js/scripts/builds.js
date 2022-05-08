@@ -37,8 +37,15 @@ export let builds = {
 		
 		return selections;
 	},
-	cards : (utils, selections, cardList) => {
+	cards : (utils, selections, cardList, cookies) => {
 		let cards = utils.flatten(cardList);
+		
+		// check if cookies.collected are set and find collected cards
+		let collectedCookie = cookies?.collected ? cookies.collected : false;
+		cards = cards.filter((card) => {
+			card.collected = collectedCookie ? collectedCookie.includes(card.id) : false;
+			return card;
+		});
 
 		// build modified cardList if selections has values
 		if (selections.length > 0) {
@@ -81,23 +88,22 @@ export let builds = {
 								// if value is already in valuesStorage, add to count
 								valuesStorage[value].count++;
 							} else {
-								const valueString = String(value);
-								const valueId = `${filter.id}-${utils.handleize(valueString)}`;
-								const valueParameter = `${filter.field}:${valueString}`;
-
-								// otherwise add as new to storage
-								valuesStorage[value] = utils.params.config(0, valueId, filter.field, valueString);
-								valuesStorage[value].value = valueParameter;
-								valuesStorage[value].count = 1;
-								valuesStorage[value].active = utils.params.get().includes(`${utils.params.url.filter}=${valueParameter}`); // check if active by looking at params
+								buildValue(value, filter, valuesStorage, 1);
 							}
 						});
 					}
 				});
 
+				// always ensure that a boolean filter has true or false
+				let valuesObject = Object.keys(valuesStorage);
+				if (filter.type == 'boolean' && valuesObject.length == 1) {
+					const valueBoolean = valuesObject[0] === true ? false : true;
+					buildValue(valueBoolean, filter, valuesStorage, 0);
+				}
+
 				// assign filter values based on valuesStorage
 				filter.values = Object.keys(valuesStorage).map((value, index) => {
-					valuesStorage[value].order = index + 1; // adjust order values after updating values
+					valuesStorage[value].order = index + 1; // adjust order values after updating values					
 					return valuesStorage[value];
 				});
 
@@ -109,6 +115,19 @@ export let builds = {
 		}
 
 		return filters;
+
+		// build config for filter values
+		function buildValue(value, filter, storage, count) {
+			const valueString = String(value);
+			const valueId = `${filter.id}-${utils.handleize(valueString)}`;
+			const valueParameter = `${filter.field}:${valueString}`;
+
+			// otherwise add as new to storage
+			storage[value] = utils.params.config(0, valueId, filter.field, valueString);
+			storage[value].value = valueParameter;
+			storage[value].count = count;
+			storage[value].active = utils.params.get().includes(`${utils.params.url.filter}=${valueParameter}`); // check if active by looking at params			
+		}
 	},
 	sort : (utils, sortList) => {
 		let sort = utils.flatten(sortList);
