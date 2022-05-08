@@ -6,7 +6,7 @@ import Collected from './Collected';
 import QuickView from './QuickView';
 
 const Cards = (props) => {
-	let { utils, theme, cards } = props;
+	let { utils, theme, cards, filters } = props;
 
 	// react variables
 	let [quickViewCard, setQuickViewCard] = useState(false);
@@ -60,7 +60,7 @@ const Cards = (props) => {
 								</p>
 							)}
 
-							<Collected card={card} />
+							<Collected card={card} filters={filters} />
 
 							<button className="quick-view-button pointer" type="button" onClick={(e) => toggleQuickView(e, card, index)}>
 								Toggle QuickView
