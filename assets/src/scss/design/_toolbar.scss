@@ -25,23 +25,23 @@
 //// SORT
 //// --------------------------------------------------------------------------
 
-.sorts {
+.sort {
 	position: relative;
-	.sort-label {
-
+	&.is-expanded {
+		.sort-options {
+			top: auto;
+			left: 0;
+			z-index: 1;
+			@include mixins.toggle-content(expanded, false);
+		}
 	}
+	.sort-label {}
 	.sort-options {
 		@include mixins.position($type: absolute, $top: -9999px, $left: -9999px, $z: -1);
 		@include mixins.toggle-content(collapsed, true);
 		background: gray;
 		margin: theme.$spacing-x2 0 0 0;
 		padding: theme.$spacing-x2;
-		&.is-expanded {
-			top: auto;
-			left: 0;
-			z-index: 1;
-			@include mixins.toggle-content(expanded, false);
-		}
 	}
 }
 

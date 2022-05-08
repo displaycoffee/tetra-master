@@ -421,31 +421,42 @@ body {
 .toolbar.toolbar-bottom {
   margin: 20px 0 0 0;
 }
-.sorts {
+.sort {
   position: relative;
 }
-.sorts .sort-options {
+.sort.is-expanded .sort-options {
+  top: auto;
+  left: 0;
+  z-index: 1;
+  visibility: visible;
+  opacity: 1;
+  -webkit-transform: scaleY(1);
+  -moz-transform: scaleY(1);
+  -ms-transform: scaleY(1);
+  -o-transform: scaleY(1);
+  transform: scaleY(1);
+  transform-origin: top;
+}
+.sort .sort-options {
   position: absolute;
   top: -9999px;
   left: -9999px;
   z-index: -1;
   opacity: 0;
   visibility: hidden;
-  -webkit-transition: opacity 0.5s ease;
-  -moz-transition: opacity 0.5s ease;
-  -ms-transition: opacity 0.5s ease;
-  -o-transition: opacity 0.5s ease;
-  transition: opacity 0.5s ease;
+  -webkit-transform: scaleY(0);
+  -moz-transform: scaleY(0);
+  -ms-transform: scaleY(0);
+  -o-transform: scaleY(0);
+  transform: scaleY(0);
+  -webkit-transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  -moz-transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  -ms-transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  -o-transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
   background: gray;
   margin: 10px 0 0 0;
   padding: 10px;
-}
-.sorts .sort-options.is-expanded {
-  top: auto;
-  left: 0;
-  z-index: 1;
-  visibility: visible;
-  opacity: 1;
 }
 
 .pages .page-options {
@@ -555,11 +566,16 @@ body {
   flex: 1 1 100%;
   opacity: 0;
   visibility: hidden;
-  -webkit-transition: opacity 0.5s ease;
-  -moz-transition: opacity 0.5s ease;
-  -ms-transition: opacity 0.5s ease;
-  -o-transition: opacity 0.5s ease;
-  transition: opacity 0.5s ease;
+  -webkit-transform: scaleY(0);
+  -moz-transform: scaleY(0);
+  -ms-transform: scaleY(0);
+  -o-transform: scaleY(0);
+  transform: scaleY(0);
+  -webkit-transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  -moz-transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  -ms-transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  -o-transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+  transition: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
 }
 .quick-view.quick-view-sm-1 {
   order: 1;
@@ -582,11 +598,12 @@ body {
 .quick-view.is-expanded {
   visibility: visible;
   opacity: 1;
-  -webkit-transition: opacity 0.5s ease;
-  -moz-transition: opacity 0.5s ease;
-  -ms-transition: opacity 0.5s ease;
-  -o-transition: opacity 0.5s ease;
-  transition: opacity 0.5s ease;
+  -webkit-transform: scaleY(1);
+  -moz-transform: scaleY(1);
+  -ms-transform: scaleY(1);
+  -o-transform: scaleY(1);
+  transform: scaleY(1);
+  transform-origin: top;
 }
 
 @media only screen and (min-width: 768px) {

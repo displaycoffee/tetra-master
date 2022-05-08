@@ -75,7 +75,7 @@
 	@include mixins.quick-view-order(theme.$page-size, theme.$per-row-sm, theme.$quick-view-sm);
 	@include mixins.toggle-content(collapsed, true);
 	&.is-expanded {
-		@include mixins.toggle-content(expanded, true);
+		@include mixins.toggle-content(expanded, false);
 	}
 }
 

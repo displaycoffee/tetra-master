@@ -13,7 +13,7 @@ const Content = (props) => {
 
 	// custom variables
 	let [loading, setLoading] = useState(true);
-	let [sorts, setSorts] = useState([]);
+	let [sort, setSort] = useState([]);
 	let [pages, setPages] = useState({});
 	let [paginated, setPaginated] = useState([]);
 	
@@ -27,13 +27,13 @@ const Content = (props) => {
 		setLoading(true);
 		
 		if (loading) {
-			// step 01: run builds.sorts and setSorts to state
-			sorts = await builds.sorts(utils, sortList);
-			if (sorts) {
-				setSorts(sorts);
+			// step 01: run builds.sort and setSort to state
+			sort = await builds.sort(utils, sortList);
+			if (sort) {
+				setSort(sort);
 
 				// get active sort
-				const sortActive = utils.values.active(sorts).pop();
+				const sortActive = utils.values.active(sort).pop();
 
 				// sort cards with active value
 				cards = utils.values.sort(cards, sortActive.type, sortActive.field, sortActive.direction);
@@ -64,11 +64,11 @@ const Content = (props) => {
 				{cards.length} card{cards.length == 1 ? '' : 's'} found
 			</h2>
 
-			<Toolbar utils={utils} buildToolbar={buildToolbar} sorts={sorts} pages={pages} location={'top'} />			
+			<Toolbar utils={utils} buildToolbar={buildToolbar} sort={sort} pages={pages} location={'top'} />			
 
 			<Cards utils={utils} theme={theme} cards={paginated} />
 
-			<Toolbar utils={utils} buildToolbar={buildToolbar} sorts={sorts} pages={pages} location={'bottom'} />
+			<Toolbar utils={utils} buildToolbar={buildToolbar} sort={sort} pages={pages} location={'bottom'} />
 		</section>
 	);
 };
