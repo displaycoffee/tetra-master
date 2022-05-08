@@ -25,15 +25,8 @@ const Cards = (props) => {
 				quickViewCard = card;
 				quickViewCard.index = index;
 				setQuickViewCard(quickViewCard);
-			}, 500);
+			});
 		}
-	}
-
-	// if quick view is expanded and elements are clicked outside, close quick view
-	if (quickViewCard) {
-		document.querySelector('body').onclick = () => {
-			setQuickViewCard(false);
-		};
 	}
 
 	// set default and on error image
@@ -77,7 +70,7 @@ const Cards = (props) => {
 				);
 			})}
 
-			<QuickView utils={utils} theme={theme} card={quickViewCard} />
+			<QuickView utils={utils} theme={theme} quickViewCard={quickViewCard} setQuickViewCard={setQuickViewCard} />
 		</div>
 	);
 };

@@ -110,13 +110,13 @@ export let builds = {
 
 		return filters;
 	},
-	sorts : (utils, sortList) => {
-		let sorts = utils.flatten(sortList);
+	sort : (utils, sortList) => {
+		let sort = utils.flatten(sortList);
 		const sortParam = `${utils.params.url.sort}=`;
 		
-		if (sorts.length > 0) {
+		if (sort.length > 0) {
 			// build modified sortList
-			sorts = sorts.filter((sort) => {
+			sort = sort.filter((sort) => {
 				// check if active by looking at params and sort.default
 				let sortActive = sort.default;				
 				if (utils.params.get().includes(sortParam)) {
@@ -127,7 +127,7 @@ export let builds = {
 			});
 		}
 		
-		return sorts;
+		return sort;
 	},
 	pages : (utils, size, cards) => {
 		// set up search params for pagination

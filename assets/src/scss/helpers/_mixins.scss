@@ -348,13 +348,17 @@
 	@if $state == collapsed {
 		opacity: 0;
 		visibility: hidden;
+		@include transform(scaleY(0));
 	}
 	@if $state == expanded {
 		visibility: visible;
 		opacity: 1;
+		@include transform(scaleY(1));
+		transform-origin: top; 
 	}
 	@if ($transition == true) {
-		@include transition(opacity 0.5s ease);
+		$transform-props: transform 0.5s ease-in-out, opacity 0.5s ease-in-out;
+		@include transition($transform-props);
 	}
 }
 
