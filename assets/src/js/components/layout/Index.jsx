@@ -1,4 +1,5 @@
 /* react imports */
+import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useCookies } from 'react-cookie';
 
@@ -13,6 +14,7 @@ import { filterList } from '../../scripts/filterList';
 import Sidebar from './Sidebar';
 import Content from './Content';
 import NoResults from './NoResults';
+import CardDetails from '../cards/CardDetails';
 
 const Index = () => {
 	// react variables
@@ -31,7 +33,7 @@ const Index = () => {
 	async function buildResponse() {
 		// reset loading whenever buildResponse is called
 		loading = true;
-		setLoading(true);
+		setLoading(loading);
 
 		if (loading) {
 			// step 01: run builds.selections and setSelections to state
@@ -54,31 +56,36 @@ const Index = () => {
 			
 			// set loading to false
 			setTimeout(() => {
-				setLoading(false);
+				loading = false;
+				setLoading(loading);
 			}, 1000);
 		}
 	}
 
+	// layout for sidebar and content 
+	let mainLayout = <div style={{color: '#ff00ff', fontSize: '30px'}}>Page is loading</div>;
+	if (!loading) {
+		mainLayout = cards.length !== 0 ? (
+			<div className="layout-row flex-nowrap">
+				<Sidebar utils={utils} buildResponse={buildResponse} selections={selections} filters={filters} />
+
+				<Content utils={utils} builds={builds} theme={theme} loading={loading} cards={cards} filters={filters} />
+			</div>
+		) : (<NoResults />);
+	}
+
 	return (
-		loading ? (
-			<div style={{color: '#ff00ff', fontSize: '30px'}}>Page is loading</div>
-		) : (
 			<div className="wrapper">
 				<main className="layout">
-					<div className="layout-row flex-nowrap">
-						{cards.length !== 0 ? (
-							<>
-								<Sidebar utils={utils} buildResponse={buildResponse} selections={selections} filters={filters} />
-
-								<Content utils={utils} builds={builds} theme={theme} cards={cards} filters={filters} />
-							</>
-						) : (
-							<NoResults />
-						)}
-					</div>
+					<Router>
+						<Routes>
+							<Route path="/details/:id" element={<CardDetails />} />
+							<Route path="/" element={mainLayout} />
+						</Routes>
+					</Router>
 				</main>
 			</div>
-		)
+		
 	);
 };
 

@@ -10,7 +10,7 @@ import Cards from '../cards/Cards';
 
 const Content = (props) => {
 	let { utils, builds, theme, cards, filters } = props;
-
+	
 	// custom variables
 	let [loading, setLoading] = useState(true);
 	let [sort, setSort] = useState([]);
@@ -24,7 +24,7 @@ const Content = (props) => {
 	async function buildToolbar() {
 		// reset loading whenever buildToolbar is called
 		loading = true;
-		setLoading(true);
+		setLoading(loading);
 		
 		if (loading) {
 			// step 01: run builds.sort and setSort to state
@@ -53,7 +53,8 @@ const Content = (props) => {
 
 			// set loading to false
 			setTimeout(() => {
-				setLoading(false);
+				loading = false;
+				setLoading(loading);
 			});
 		}
 	}

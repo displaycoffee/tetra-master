@@ -1,4 +1,5 @@
 /* react imports */
+import { Link } from 'react-router-dom';
 import { useState } from 'react';
 
 /* local component imports */
@@ -48,23 +49,25 @@ const Cards = (props) => {
 						</div>
 
 						<div className="card-details">
-							{card.label && (
-								<p className="card-details-name">
-									<strong>Name:</strong> {card.label}
-								</p>
-							)}
+							<Link to={`/details/${card.id}`} state={{ card: card }}>
+								{card.label && (
+									<p className="card-details-name">
+										<strong>Name:</strong> {card.label}
+									</p>
+								)}
 
-							{card.stats && (
-								<p className="card-details-stats">
-									<strong>Stats:</strong> {card.stats}
-								</p>
-							)}
+								{card.stats && (
+									<p className="card-details-stats">
+										<strong>Stats:</strong> {card.stats}
+									</p>
+								)}
 
-							<Collected card={card} filters={filters} />
+								<Collected card={card} filters={filters} />
 
-							<button className="quick-view-button pointer" type="button" onClick={(e) => toggleQuickView(e, card, index)}>
-								Toggle QuickView
-							</button>
+								<button className="quick-view-button pointer" type="button" onClick={(e) => toggleQuickView(e, card, index)}>
+									Toggle QuickView
+								</button>
+							</Link>
 						</div>
 					</article>
 				);
